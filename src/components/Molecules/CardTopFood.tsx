@@ -1,13 +1,13 @@
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Tabs, Tab } from "@nextui-org/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useSortedFood } from '../../../public/Hooks/useSortedFood'; 
 import { TopFood } from "../../types/typeFood";
 
-type CardTopFoodProps =  {
+type CardTopFoodProps = {
   topFood: TopFood[];
-}
+};
 
-export const CardTopFood = ({ topFood } : CardTopFoodProps) => {
+export const CardTopFood = ({ topFood }: CardTopFoodProps) => {
   const { sortedFood, setSortCriteria } = useSortedFood(topFood, 'rating');
 
   // Función para renderizar las estrellas según la calificación
@@ -23,21 +23,34 @@ export const CardTopFood = ({ topFood } : CardTopFoodProps) => {
     </div>
   );
 
+  const handleSelectionChange = (key: any) => {
+    setSortCriteria(String(key));
+  };
+
   return (
     <div>
-      <div className="flex justify-end mb-4">
-        <button onClick={() => setSortCriteria('rating')}>Sort by Rating</button>
-        <button onClick={() => setSortCriteria('price')} className="ml-2">Sort by Price</button>
-      </div>
-      <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
+     <div className=" lg:w-[25%]">
+     <Tabs
+        fullWidth
+        size="md"
+        aria-label="Sort tabs"
+        onSelectionChange={handleSelectionChange}
+      >
+        <Tab key="rating" title="Sort by Rating" />
+        <Tab key="price" title="Sort by Price" />
+      </Tabs>
+     </div>
+
+
+      <div className="gap-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4">
         {sortedFood.map((item, index) => (
-          <Card shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+          <Card shadow="sm" key={index} isPressable onPress={() => console.log(`item pressed ${item.id}`)}>
             <CardBody className="overflow-visible p-0">
               <Image
                 shadow="sm"
                 radius="lg"
                 width="100%"
-                alt={item.img}
+                alt={item.name}
                 className="w-full object-cover h-[140px]"
                 src={item.img}
               />

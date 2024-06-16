@@ -5,6 +5,10 @@ export type Food = {
     img: string
 }
 
-export type TopFood = Food  &{
+export type TopFood = Food & {
     rating: number
+}
+
+export type Drinks = Food & {
+    type: string
 }

@@ -1,6 +1,7 @@
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { CardTopFood } from "../Molecules/CardTopFood";
-import { topRatedFood } from "../../data/data";
+import { topRatedFood, AllFood, AllDrinks } from "../../data/data";
+import { CardFood } from "../Molecules/CardFood";
 
 export const Menu = () => {
   let tabs = [
@@ -17,13 +18,18 @@ export const Menu = () => {
       id: "drinks",
       label: "Drinks",
       content:
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        <div>
+          <CardFood data={ AllDrinks }/>
+        </div>
     },
     {
       id: "food",
       label: "Food",
       content:
-        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+       <div>
+         <CardFood data={ AllFood }/>
+       </div>
+
     },
   ];
 
@@ -32,19 +38,19 @@ export const Menu = () => {
       <Tabs
         classNames={{
           tabList:
-            "gap-6 w-full relative rounded-none px-6 bg-gradient-to-b from-customRed to-customDarkRed",
+            "gap-6 w-full relative rounded-lg px-6 bg-customDarkRed  ",
           cursor: "w-full bg-gradient-to-b from-customRed to-customDarkRed",
-          tab: "max-w-fit px-0 h-12",
-          tabContent: "group-data-[selected=true]:text-[#06b6d4] ",
+          tab: "max-w-fit px-0 h-12 px-2",
+          tabContent: "group-data-[selected=true]:text-white ",
         }}
         aria-label="Dynamic tabs"
         items={tabs}
-        variant="underlined"
+        variant="solid"
       >
         {(item) => (
-          <Tab key={item.id} title={item.label} className=" w-full">
+          <Tab key={item.id} title={item.label} className=" w-full ">
             <Card>
-              <CardBody>{item.content}</CardBody>
+              <CardBody className=" shadow-2xl ">{item.content}</CardBody>
             </Card>
           </Tab>
         )}

@@ -55,7 +55,7 @@ export const Lading = () => {
               <img
                 src={tacos}
                 alt="Tacos"
-                className="w-full h-full object-cover transform lg:translate-x-10 lg:translate-y-10 rounded-lg shadow-lg"
+                className="w-full h-full object-cover transform lg:translate-x-10 lg:translate-y-10 rounded-lg shadow-lg "
               />
             </div>
           </div>
