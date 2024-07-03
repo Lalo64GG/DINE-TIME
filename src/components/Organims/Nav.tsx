@@ -8,12 +8,11 @@ import {
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
-  Avatar,
-  Button,
+  Avatar
 } from "@nextui-org/react";
 
 export const Nav = () => {
-  const isLogged = true;
+  const isLogged = false;
 
   return (
     <Navbar    classNames={{
@@ -88,11 +87,7 @@ export const Nav = () => {
           </Dropdown>
         </NavbarContent>
       ) : (
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+       <></>
       )}
     </Navbar>
   );

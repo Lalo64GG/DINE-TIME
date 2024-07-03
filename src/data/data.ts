@@ -1,4 +1,5 @@
-import { Drinks, Food, TopFood } from "../types/typeFood"
+import { Drinks, Food, TopFood,  } from "../types/typeFood";
+import { Comment } from "../types/typeComments";
 
 export const topRatedFood: TopFood[] = [
     {
@@ -87,44 +88,88 @@ export const AllFood: Food[] = [
 export const AllDrinks: Drinks[] = [
     {
         id: '1',
-        name: 'Coca Cola',
-        price: 10,
+        nombre: 'Coca Cola',
+        precio: 10,
         img: '/images/tacos.png',
-        type: 'Refrescos'
+        tipo: 'Refrescos',
+        createdAt:"2017-",
+        categoriaId:"1"
     },
     {
         id: '2',
-        name: 'Pepsi',
-        price: 1,
+        nombre: 'Pepsi',
+        precio: 1,
         img: '/images/tacos.png',
-        type: 'Refrescos'
+        tipo: 'Refrescos',
+        createdAt:"2017-",
+        categoriaId:"1"
     },
     {
         id: '3',
-        name: 'Agua de Horchata',
-        price: 2,
+        nombre: 'Agua de Horchata',
+        precio: 2,
         img: '/images/tacos.png',
-        type: 'Aguas'
+        tipo: 'Aguas',
+        createdAt:"2017-",
+        categoriaId:"1"
     },
     {
         id: '4',
-        name: 'Agua de Jamaica',
-        price: 3,
+        nombre: 'Agua de Jamaica',
+        precio: 3,
         img: '/images/tacos.png',
-        type: 'Aguas'
+        tipo: 'Aguas',
+        createdAt:"2017-",
+        categoriaId:"1"
     },
     {
         id: '5',
-        name: 'Cerveza',
-        price: 5,
+        nombre: 'Cerveza',
+        precio: 5,
         img: '/images/tacos.png',
-        type: 'Cervezas'
+        tipo: 'Cervezas',
+        createdAt:"2017-",
+        categoriaId:"1"
     },
     {
         id: '6',
-        name: 'Tequila',
-        price: 4,
+        nombre: 'Tequila',
+        precio: 4,
         img: '/images/tacos.png',
-        type: 'Licores'
+        tipo: 'Licores',
+        createdAt:"2017-",
+        categoriaId:"1"
     },
 ]
+
+export const Comments: Comment[] = [
+    {
+        id: "1",
+        comment: "Me gustan los tacos de pastor",
+        email: "prueba1@gmail.com",
+        name: "prueba",
+        img: "/images/comment1.png"
+    },
+    {
+        id: "2",
+        comment: "Me gustan los tacos de pastor",
+        email: "prueba2@gmail.com",
+        name: "prueba",
+        img: "/images/comment2.png"
+    },
+    {
+        id: "3",
+        comment: "Me gustan los tacos de pastor",
+        email: "prueba3@gmail.com",
+        name: "prueba",
+        img: "/images/comment3.png"
+    },
+    {
+        id: "4",
+        comment: "Me gustan los tacos de pastor",
+        email: "prueba4@gmail.com",
+        name: "prueba",
+        img: "/images/comment4.png"
+    }
+    
+] 

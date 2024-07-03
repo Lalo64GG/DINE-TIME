@@ -1,8 +1,10 @@
 export type Food = {
     id: string
-    name: string
-    price: number
-    img: string
+    nombre: string
+    precio: number
+    categoriaId?: string 
+    img?: string,
+    createdAt: string
 }
 
 export type TopFood = Food & {
@@ -10,5 +12,9 @@ export type TopFood = Food & {
 }
 
 export type Drinks = Food & {
-    type: string
+    tipo: string
+}
+
+export type Categoria = {
+    productos: Food[] | Drinks[];
 }

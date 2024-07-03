@@ -6,7 +6,14 @@ import { Providers } from "../../ui/Providers";
 import { ThemeSwitcher } from "../../ui/ThemeSwitcher";
 import { DataLoader } from "../../ui/Spinner";
 
+import { useGet } from "../../../public/Hooks/useGet"
+import { FormReser } from "./FormReser";
+
 export const Lading = () => {
+
+
+  const { data } = useGet("http://localhost:3000/API/producto");
+
 
   let activateSpinner = true;
 
@@ -66,6 +73,7 @@ export const Lading = () => {
       <Carrusel />
       </div>
 
+      <FormReser/>
      
     </div>
    </Providers>

@@ -7,33 +7,36 @@ import { Lading } from "./components/Organims/Lading";
 import { Menu } from "./components/Organims/Menu";
 
 import { Providers } from "./ui/Providers";
-import { Button } from "./components/Atoms/Button";
+import { FoodId } from "./components/Organims/FoodId";
+import { Login } from "./components/Organims/Login";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: 
-    <div>
-    <div className="bg-gray-950 rounded-md shadow-lg p-4">
-      <Button text="Button 1" customStyle="border-r-0 rounded-l-lg px-6" />
-      <Button text="Button 2" customStyle="border-l-0 rounded-r-lg px-6" />
-    </div>
-  </div>
-  },
+
   {
     path: "/",
     element: <Layout />,
     children: [
       {
-        path: "/home",
+        path: "/",
         element: <Lading />,
       },
       {
         path: "/menu",
         element: <Menu/>,
       },
+      {
+        path: "/food/:id",
+        element: <FoodId/>
+      },
     ],
   },
+  {
+    path: "/admin",
+    element: <Login/>,
+    children: [
+      // Admin routes go here
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

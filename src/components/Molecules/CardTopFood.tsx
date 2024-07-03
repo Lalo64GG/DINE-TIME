@@ -2,12 +2,16 @@ import { Card, CardBody, CardFooter, Image, Tabs, Tab } from "@nextui-org/react"
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useSortedFood } from '../../../public/Hooks/useSortedFood'; 
 import { TopFood } from "../../types/typeFood";
+import { useNavigate } from "react-router-dom";
 
 type CardTopFoodProps = {
   topFood: TopFood[];
 };
 
 export const CardTopFood = ({ topFood }: CardTopFoodProps) => {
+
+  const navigate = useNavigate();
+
   const { sortedFood, setSortCriteria } = useSortedFood(topFood, 'rating');
 
   // Función para renderizar las estrellas según la calificación
@@ -44,7 +48,7 @@ export const CardTopFood = ({ topFood }: CardTopFoodProps) => {
 
       <div className="gap-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4">
         {sortedFood.map((item, index) => (
-          <Card shadow="sm" key={index} isPressable onPress={() => console.log(`item pressed ${item.id}`)}>
+          <Card shadow="sm" key={index} isPressable onPress={() => navigate(`/food/${item.id}`)}>
             <CardBody className="overflow-visible p-0">
               <Image
                 shadow="sm"
