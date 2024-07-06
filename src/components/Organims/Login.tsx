@@ -4,7 +4,7 @@ export const Login = () => {
   return (
     <div className="w-screen h-screen flex justify-center items-center mx-auto bg-gray-100">
       <div className="w-full h-full lg:w-6/12 lg:flex justify-center items-center flex-col mb-10 lg:mb-0 p-4 lg:p-0 bg-[#340A0B] text-white  shadow-lg rounded-r-lg overflow-hidden hidden relative">
-        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: 'url(https://i.pinimg.com/736x/c3/f6/ae/c3f6aeb3dafb7598e096f04848011af8.jpg)' }}></div>
+        <div className="rounded-r-lg shadow-lg absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: 'url(https://i.pinimg.com/736x/c3/f6/ae/c3f6aeb3dafb7598e096f04848011af8.jpg)' }}></div>
         <div className="relative z-10 p-8 lg:p-16">
           <h2 className="font-bold text-4xl lg:text-5xl text-center lg:text-left mb-8">
             ¡Reserva tu lugar para una explosión de sabor!

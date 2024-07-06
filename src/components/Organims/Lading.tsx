@@ -5,14 +5,10 @@ import { Carrusel } from "../Molecules/Carrusel";
 import { Providers } from "../../ui/Providers";
 import { ThemeSwitcher } from "../../ui/ThemeSwitcher";
 import { DataLoader } from "../../ui/Spinner";
-
-import { useGet } from "../../../public/Hooks/useGet"
-import { FormReser } from "./FormReser";
+import { FormReser } from "../Molecules/FormReser";
 
 export const Lading = () => {
 
-
-  const { data } = useGet("http://localhost:3000/API/producto");
 
 
   let activateSpinner = true;
@@ -73,7 +69,11 @@ export const Lading = () => {
       <Carrusel />
       </div>
 
-      <FormReser/>
+      <div>
+        <h2 className="text-center font-bold text-2xl">¡Haz tu Reserva!</h2>
+        <p className=" text-center font-semibold mb-5">y no pierdas tiempo esperando </p>
+        <FormReser/>
+      </div>
      
     </div>
    </Providers>

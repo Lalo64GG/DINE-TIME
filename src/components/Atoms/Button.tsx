@@ -15,7 +15,8 @@ export const Button = ({
 }: ButtonProps) => {
   const navigate = useNavigate();
 
-  const onClick = () => {
+  const onClick = (e?:any) => {
+    e.preventDefault();
     if (handlePress) {
       handlePress();
     }
