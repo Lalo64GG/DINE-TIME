@@ -10,7 +10,7 @@ import { Providers } from "./ui/Providers";
 import { FoodId } from "./components/Organims/FoodId";
 import { Login } from "./components/Organims/Login";
  import {AddWaiter} from "./components/Organims/AddWaiter";
-// import { Waiters } from "./components/Organims/Waiters";
+//  import { Waiters } from "./components/Organims/Waiters";
 
 const router = createBrowserRouter([
   {
@@ -41,8 +41,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/menu",
-      //  element:<Waiters/>
-      element: <AddWaiter/>
+       element:<AddWaiter/>
+      // element: <AddWaiter/>
   
       },
     ],
