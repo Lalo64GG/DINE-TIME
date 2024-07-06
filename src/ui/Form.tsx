@@ -2,6 +2,7 @@ import { useState } from "react";
 import {Tabs, Tab, Input, Link, Button, Card, CardBody} from "@nextui-org/react";
 
 import { usePost } from "../../public/Hooks/usePost"  
+import { useNavigate } from "react-router-dom";
 
 export const Form = () => {
   const [selected, setSelected] = useState("login");
@@ -11,6 +12,7 @@ export const Form = () => {
   const [password, setPassword] = useState("");
 
   const { handlePress } = usePost();
+  const  navigate = useNavigate()
 
   const handleSelectionChange = (key: any) => {
     setSelected(String(key));
@@ -27,7 +29,11 @@ export const Form = () => {
       const success = await handlePress(url, objectPost);
       if (!success) {
         console.log("Login exitoso");
-      }     
+        return;
+      }  
+      
+      navigate("/admin/home")
+
     } catch (error) {
       console.error("Error en el login:", error);
     }
