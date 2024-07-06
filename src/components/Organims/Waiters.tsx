@@ -1,6 +1,6 @@
 // pages/waiters.tsx
 import { useState, useEffect } from "react";
-import { Button, Card, Grid } from "@nextui-org/react";
+import { Button, Card, Container } from "@nextui-org/react";
 import Link from "next/link";
 
 interface Waiter {
@@ -17,7 +17,7 @@ const waitersData: Waiter[] = [
   { name: "José de Pablo", lastName: "de Pablo", jobTitle: "Mesero", phone: "5555555555", email: "jose@example.com" },
 ];
 
-const Waiters = () => {
+export const Waiters = () => {
   const [waiters, setWaiters] = useState<Waiter[]>([]);
 
   useEffect(() => {
@@ -25,27 +25,25 @@ const Waiters = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <h1>Lista de Meseros</h1>
       <Link href="/add-waiter">
         <Button>Añadir Mesero</Button>
       </Link>
-      <Grid.Container gap={2}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '16px' }}>
         {waiters.map((waiter, index) => (
-          <Grid key={index}>
-            <Card>
-              <Card.Body>
-                <h4>{waiter.name}</h4>
-                <p>{waiter.jobTitle}</p>
-                <p>{waiter.phone}</p>
-                <p>{waiter.email}</p>
-              </Card.Body>
-            </Card>
-          </Grid>
+          <Card key={index} style={{ width: '300px' }}>
+            <Card.Body>
+              <h4>{waiter.name}</h4>
+              <p>{waiter.jobTitle}</p>
+              <p>{waiter.phone}</p>
+              <p>{waiter.email}</p>
+            </Card.Body>
+          </Card>
         ))}
-      </Grid.Container>
-    </div>
+      </div>
+    </Container>
   );
 };
 
-export default Waiters;
+
