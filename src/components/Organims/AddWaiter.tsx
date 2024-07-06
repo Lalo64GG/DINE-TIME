@@ -1,7 +1,7 @@
 // pages/add-waiter.tsx
 import { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
-import { useRouter } from "next/router";
+
 
 export const AddWaiter = () => {
   const [name, setName] = useState("");
@@ -9,13 +9,11 @@ export const AddWaiter = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const router = useRouter();
+
 
   const handleAddWaiter = () => {
-    const newWaiter = { name, lastName, jobTitle, phone, email };
-    console.log("Añadiendo mesero:", newWaiter);
-    // Aquí puedes añadir la lógica para enviar el nuevo mesero a tu API
-    router.push("/waiters");
+    // const newWaiter = { name, lastName, jobTitle, phone, email };
+   
   };
 
   return (
