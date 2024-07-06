@@ -9,9 +9,9 @@ import { Menu } from "./components/Organims/Menu";
 import { Providers } from "./ui/Providers";
 import { FoodId } from "./components/Organims/FoodId";
 import { Login } from "./components/Organims/Login";
+import {AddWaiter} from "./components/Organims/AddWaiter";
 
 const router = createBrowserRouter([
-
   {
     path: "/",
     element: <Layout />,
@@ -22,28 +22,35 @@ const router = createBrowserRouter([
       },
       {
         path: "/menu",
-        element: <Menu/>,
+        element: <Menu />,
       },
       {
         path: "/food/:id",
-        element: <FoodId/>
+        element: <FoodId />,
       },
     ],
   },
   {
     path: "/admin",
-    element: <Login/>,
+    element: <Login />,
+  },
+  {
+    path: "/admin/",
+    element: <Layout />,
     children: [
-      // Admin routes go here
-    ]
-  }
+      {
+        path: "/admin/menu",
+       element:<AddWaiter/>
+      },
+    ],
+  },
 ]);
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-     <Providers >
-     <RouterProvider router={router} />
-     </Providers>
-    
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>
   </React.StrictMode>
 );
