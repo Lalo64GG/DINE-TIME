@@ -3,51 +3,54 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   DropdownItem,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
   Avatar
 } from "@nextui-org/react";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom"; // Importa useLocation desde react-router-dom
 
 export const Nav = () => {
   const isLogged = false;
+  const location = useLocation(); // Obtén la ubicación actual del router
+
+  // Estado para guardar la ruta activa
+  const [activePath, setActivePath] = useState(location.pathname);
+
+  // Función para actualizar la ruta activa
+  const handleSetActive = (path :any) => {
+    setActivePath(path);
+  };
 
   return (
-    <Navbar    classNames={{
-      item: [
-        "flex",
-        "relative",
-        "h-full",
-        "items-center",
-        "data-[active=true]:after:content-['']",
-        "data-[active=true]:after:absolute",
-        "data-[active=true]:after:bottom-0",
-        "data-[active=true]:after:left-0",
-        "data-[active=true]:after:right-0",
-        "data-[active=true]:after:h-[2px]",
-        "data-[active=true]:after:rounded-[2px]",
-        "data-[active=true]:after:bg-primary",
-      ],
-    }}>
+    <Navbar>
       <NavbarBrand>
         <p className="font-bold text-inherit">DINE-TIME</p>
       </NavbarBrand>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/menu">
+          <Link
+            to="/menu"
+            className={activePath === "/menu" ? "text-secondary" : "text-foreground"} // Cambia el color si está en /menu
+            onClick={() => handleSetActive("/menu")} // Actualiza la ruta activa
+          >
             Menú
           </Link>
         </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page" color="secondary">
+        <NavbarItem>
+          <Link
+            to="/customers"
+            className={activePath === "/customers" ? "text-secondary" : "text-foreground"} // Cambia el color si está en /customers
+            onClick={() => handleSetActive("/customers")} // Actualiza la ruta activa
+          >
             Customers
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link to="#" className="text-foreground">
             Integrations
           </Link>
         </NavbarItem>
@@ -87,7 +90,7 @@ export const Nav = () => {
           </Dropdown>
         </NavbarContent>
       ) : (
-       <></>
+        <></>
       )}
     </Navbar>
   );
