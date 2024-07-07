@@ -1,109 +1,64 @@
-import { useState, useEffect } from "react";
-import { Button, Card } from "@nextui-org/react";
-import Link from "next/link";
-
-interface Waiter {
-  name: string;
-  lastName: string;
-  jobTitle: string;
-  phone: string;
-  email: string;
-}
-
-const waitersData: Waiter[] = [
-  {
-    name: "Alfredo Álvarez",
-    lastName: "Álvarez",
-    jobTitle: "Mesero",
-    phone: "1234567890",
-    email: "alfredo@example.com",
-  },
-  {
-    name: "Taylor Smith",
-    lastName: "Smith",
-    jobTitle: "Mesero",
-    phone: "0987654321",
-    email: "taylor@example.com",
-  },
-  {
-    name: "José de Pablo",
-    lastName: "de Pablo",
-    jobTitle: "Mesero",
-    phone: "5555555555",
-    email: "jose@example.com",
-  },
-];
+import { Button } from "../Atoms/Button";
+import { waitersData } from "../../data/data";
+import { Avatar } from "@nextui-org/react";
+import { ModalUi } from "../../ui/Modal";
 
 export const Waiters = () => {
-  const [waiters, setWaiters] = useState<Waiter[]>([]);
 
-  useEffect(() => {
-    setWaiters(waitersData);
-  }, []);
+
+  const waiterFormConfig = {
+    name: { label: "Name", placeholder: "Enter your name" },
+    position: { label: "Position", placeholder: "Enter your position" },
+    email: { label: "Email", placeholder: "Enter your email", type: "email" },
+    phone: { label: "Phone", placeholder: "Enter your phone number", type: "tel" },
+    photo: { label: "Photo URL", placeholder: "Enter the URL of your photo", type: "url" }
+  };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Link href="/AddWaiter">
-        <Button
-          style={{
-            color: "white",
-            backgroundImage:
-              "linear-gradient(135deg, #8E0000 0%, #280000 100%)",
-          }}
-        >
-          Añadir Mesero
-        </Button>
-      </Link>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "16px",
-          marginTop: "16px",
-        }}
-      >
-        {waiters.map((waiter, index) => (
-          <Card
+    <div className="p-5">
+      <ModalUi 
+      buttonLabel="Add Waiter"
+      modalTitle="Add New Waiter"
+      inputsConfig={waiterFormConfig}
+      onSubmit={() => console.log('Waiter added')}
+      footerButtons={[
+        { label: "Cancel", color: "danger", variant: "flat", onClick: () => console.log('Cancelled') },
+        { label: "Add Waiter", color: "primary", onClick: () => console.log('Waiter added') }
+      ]}
+      photoIsRequired = { true } 
+    />
+      <div className="flex flex-wrap gap-4 mt-4 justify-center bg-white shadow-2xl p-4 rounded-lg">
+        {waitersData.map((waiter, index) => (
+          <div
             key={index}
-            style={{
-              width: "300px",
-              height: "250px",
-              padding: "16px",
-              backgroundColor: "#4A1010",
-              color: "white",
-              position: "relative",
-            }}
+            className="w-72 h-80 p-6 bg-gradient-to-b from-customRed to-customDarkRed text-white relative rounded-md shadow-2xl transform transition-transform hover:scale-105 hover:cursor-pointer"
           >
-            <div
-              style={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                backgroundColor: "#CACACA",
-                position: "absolute",
-                top: "10px",
-                left: "50%",
-                transform: "translateX(-50%)",
-              }}
-            ></div>
-            <h4 style={{ marginTop: "80px" }}>{waiter.name}</h4>
-            <p style={{ marginBottom: "8px" }}>{waiter.jobTitle}</p>
-            <p style={{ marginBottom: "8px" }}>{waiter.phone}</p>
-            <p style={{ marginBottom: "8px" }}>{waiter.email}</p>
-            <button
-              style={{
-                color: "black",
-                backgroundColor: "white",
-                height: "40px",
-                width: "140px",
-                borderRadius: "20px",
-              
-              }}
-            >
-        
-              Más información
-            </button>
-          </Card>
+            <div className="flex justify-center">
+              <Avatar size="lg" className="absolute top-5 shadow-md" />
+            </div>
+            <h4 className="mt-16 text-center text-lg font-semibold">
+              {waiter.name}
+            </h4>
+            <p className="mb-2 text-center font-semibold">
+              Puesto:{" "}
+              <span className="text-sm font-normal">{waiter.jobTitle}</span>
+            </p>
+            <p className="mb-2 text-center">
+              No. Telefónico:{" "}
+              <span className="text-sm font-normal">{waiter.phone}</span>
+            </p>
+            <p className="mb-2 text-center">
+              Email: {" "}
+              <span className="text-sm font-normal"> {waiter.email}</span>
+            </p>
+
+            <div className="flex justify-center items-center mt-4">
+              <Button
+                text="Más información"
+                customStyle="rounded-xl bg-white text-black hover:bg-gray-300 px-2 py-2 text-sm  lg:px-4 lg:text-xl"
+              />
+            </div>
+          </div>
         ))}
       </div>
     </div>

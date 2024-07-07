@@ -5,12 +5,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Layout } from "./Layout";
 import { Lading } from "./components/Organims/Lading";
 import { Menu } from "./components/Organims/Menu";
-
-import { Providers } from "./ui/Providers";
+import { Providers } from "./Tools/Providers";
 import { FoodId } from "./components/Organims/FoodId";
 import { Login } from "./components/Organims/Login";
- import {AddWaiter} from "./components/Organims/AddWaiter";
-//  import { Waiters } from "./components/Organims/Waiters";
+import { AdminHome } from "./components/Organims/AdminHome";
+import { Waiters } from "./components/Organims/Waiters";
+import { ProtectedRoute } from "./Tools/ProtectedRoute"; // Importa el componente de ruta protegida
+import { AuthProvider } from "./Tools/AuthContextType"; // Importa el proveedor de autenticación
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "/adm",
     element: <Login />,
   },
   {
@@ -40,20 +41,25 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
+        path: "/admin/home",
+        element: <ProtectedRoute element={<AdminHome />} />, // Ruta protegida
+      },
+      {
         path: "/admin/menu",
-       element:<AddWaiter/>
-      // element: <AddWaiter/>
-  
+        element: <Waiters />, // Ruta protegida
       },
     ],
   },
 ]);
 
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Providers>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <Providers>
+          <RouterProvider router={router} />
+        </Providers>
+      </AuthProvider>
     </Providers>
   </React.StrictMode>
 );

@@ -27,7 +27,7 @@ export const Button = ({
 
   return (
     <button
-      className={`text-lg font-bold shadow-md active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out ${
+      className={`text-lg font-bold shadow-md active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out lg:px-4 ${
         customStyle ? customStyle : "bg-red-500 p-4 hover:bg-red-800"
       }`}
       onClick={onClick}

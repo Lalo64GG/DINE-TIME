@@ -1,73 +1,93 @@
 import { useState } from "react";
-import {Tabs, Tab, Input, Link, Button, Card, CardBody} from "@nextui-org/react";
-
-import { usePost } from "../../public/Hooks/usePost"  
+import { Tabs, Tab, Input, Link, Button, Card, CardBody } from "@nextui-org/react";
+import { usePost } from "../Tools/Hooks/usePost";  
 import { useNavigate } from "react-router-dom";
+import {useInputValidation} from "../Tools/Hooks/useInputValidation";
+import {Alert} from "../ui/Alert";
+import { useAuth } from "../Tools/AuthContextType"; 
 
 export const Form = () => {
   const [selected, setSelected] = useState("login");
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const email = useInputValidation("");
+  const password = useInputValidation("");
+  const name = useInputValidation("");
+  const lastName = useInputValidation("");
 
   const { handlePress } = usePost();
-  const  navigate = useNavigate()
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Usar el hook de autenticación
 
   const handleSelectionChange = (key: any) => {
     setSelected(String(key));
   };
 
   const handleLogin = async () => {
+    email.validate();
+    password.validate();
+
+    if (email.isInvalid || password.isInvalid) {
+      return;
+    }
+
     const url = 'http://localhost:3000/API/auth/login';
     const objectPost = {
-      correo: email,
-      password
-     };
+      correo: email.value,
+      password: password.value,
+    };
 
     try {
       const success = await handlePress(url, objectPost);
-      if (!success) {
-        console.log("Login exitoso");
-        return;
-      }  
-      
-      navigate("/admin/home")
-
-    } catch (error) {
+      if (success) {
+        setAlert({ message: "Login exitoso", type: 'success' });
+        login(); // Actualizar el estado de autenticación
+        setTimeout(() => {
+          navigate("/admin/home");
+        }, 2000)
+      } else {
+        setAlert({ message: "Correo y/o contraseña incorrecta", type: 'error' });
+      }
+    } catch (error:any) {
+      setAlert({ message: "Error en el login: " + error.message, type: 'error' });
       console.error("Error en el login:", error);
     }
   };
 
   const handleSignUp = async () => {
+    name.validate();
+    lastName.validate();
+    email.validate();
+    password.validate();
+
+    if (name.isInvalid || lastName.isInvalid || email.isInvalid || password.isInvalid) {
+      return;
+    }
+
     const url = 'http://localhost:3000/API/admin'; 
     const objectPost = {
-      nombre: name,
-      apellido: lastName,
-      correo: email,
-      password
-     }; 
+      nombre: name.value,
+      apellido: lastName.value,
+      correo: email.value,
+      password: password.value,
+    }; 
 
     try {
-        const success = await handlePress(url, objectPost);
-        if (success) {
-            // Manejar lógica después de una operación exitosa
-            console.log("Registro exitoso");
-        } else {
-            // Manejar lógica después de un error
-            console.log("Error en el registro");
-        }
-    } catch (error) {
-        console.error("Error en el registro:", error);
+      const success = await handlePress(url, objectPost);
+      if (success) {
+        setAlert({ message: "Registro exitoso", type: 'success' });
+      } else {
+        setAlert({ message: "Error en el registro", type: 'error' });
+      }
+    } catch (error :any) {
+      setAlert({ message: "Error en el registro: " + error.message, type: 'error' });
+      console.error("Error en el registro:", error);
     }
-};
-
-
-
-
+  };
 
   return (
     <div className="flex flex-col w-full">
+      {alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
       <Card className="max-w-full w-[340px] h-[440px] ">
         <CardBody className="overflow-hidden">
           <Tabs
@@ -84,18 +104,22 @@ export const Form = () => {
                   label="Email" 
                   placeholder="Enter your email" 
                   type="email"
-                  onChange={ (e) => setEmail(e.target.value) } 
+                  value={email.value}
+                  onChange={ (e) => email.setValue(e.target.value) } 
+                  isInvalid={email.isInvalid}
                 />
                 <Input
                   isRequired
                   label="Password"
                   placeholder="Enter your password"
                   type="password"
-                  onChange={ (e) => setPassword(e.target.value)}
+                  value={password.value}
+                  onChange={ (e) => password.setValue(e.target.value)}
+                  isInvalid={password.isInvalid}
                 />
                 <p className="text-center text-small">
                   Need to create an account?{" "}
-                  <Link  className="hover:cursor-pointer" size="sm" onPress={() => setSelected("sign-up")}>
+                  <Link className="hover:cursor-pointer" size="sm" onPress={() => setSelected("sign-up")}>
                     Sign up
                   </Link>
                 </p>
@@ -113,27 +137,35 @@ export const Form = () => {
                   label="Name" 
                   placeholder="Enter your name" 
                   type="text"
-                  onChange={ (e) => setName(e.target.value)}
+                  value={name.value}
+                  onChange={ (e) => name.setValue(e.target.value)}
+                  isInvalid={name.isInvalid}
                 />
                 <Input  
                   label="Last Name" 
                   placeholder="Enter your last name" 
                   type="text"
-                  onChange={ (e) => setLastName(e.target.value)}
+                  value={lastName.value}
+                  onChange={ (e) => lastName.setValue(e.target.value)}
+                  isInvalid={lastName.isInvalid}
                 />
                 <Input 
                   isRequired 
                   label="Email" 
                   placeholder="Enter your email" 
                   type="email" 
-                  onChange={ (e) => setEmail(e.target.value)}
+                  value={email.value}
+                  onChange={ (e) => email.setValue(e.target.value)}
+                  isInvalid={email.isInvalid}
                 />
                 <Input
                   isRequired
                   label="Password"
                   placeholder="Enter your password"
                   type="password"
-                  onChange={ (e) => setPassword(e.target.value)}
+                  value={password.value}
+                  onChange={ (e) => password.setValue(e.target.value)}
+                  isInvalid={password.isInvalid}
                 />
                 <p className="text-center text-small">
                   Already have an account?{" "}
@@ -142,7 +174,7 @@ export const Form = () => {
                   </Link>
                 </p>
                 <div className="flex gap-2 justify-end mb-10">
-                  <Button fullWidth color="primary" onClick={ handleSignUp }  >
+                  <Button fullWidth color="primary" onClick={ handleSignUp }>
                     Sign up
                   </Button>
                 </div>
@@ -153,4 +185,4 @@ export const Form = () => {
       </Card>
     </div>
   );
-}
+};

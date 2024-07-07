@@ -1,40 +1,47 @@
 import { DateInput, Input, TimeInput } from "@nextui-org/react";
 import { CalendarDate, parseDate, parseTime } from "@internationalized/date";
-import { CalendarIcon } from "../../ui/CalendarIcon";
+import { CalendarIcon } from "../../ui/svg/CalendarIcon";
 import { Button } from "../Atoms/Button";
 import { useState } from "react";
+import { useInputValidation } from "../../Tools/Hooks/useInputValidation"; // Importar el hook de validación
 
 export const FormReser = () => {
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const name = useInputValidation("");
+  const lastName = useInputValidation("");
+  const email = useInputValidation("");
+  const phone = useInputValidation("");
+  const amountOfPeople = useInputValidation("");
 
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isInvalid, setIsInvalid] = useState(false); // Estado para controlar la validación
-
-  const [amountOfPeople, setAmountOfPeople] = useState("");
   const [date, setDate] = useState(parseDate("2024-04-04"));
   const [time, setTime] = useState(parseTime("12:00"));
 
   const handleConfirm = () => {
     // Verificar si alguno de los campos del primer formulario está vacío
-    if (!name.trim() || !lastName.trim() || !email.trim() || !phone.trim()) {
-      setIsInvalid(true); // Activar isInvalid si hay campos vacíos
-      setIsConfirmed(false); // Asegurarse de que isConfirmed sea false si hay campos vacíos
+    name.validate();
+    lastName.validate();
+    email.validate();
+    phone.validate();
+
+    if (
+      !name.value.trim() ||
+      !lastName.value.trim() ||
+      !email.value.trim() ||
+      !phone.value.trim()
+    ) {
+      setIsConfirmed(false);
     } else {
-      setIsConfirmed(true); // Confirmar si todos los campos están llenos
-      setIsInvalid(false); // Resetear isInvalid si todos los campos están llenos
+      setIsConfirmed(true);
     }
   };
 
   const handleSubmit = () => {
     const data = {
-      name,
-      lastName,
-      email,
-      phone,
-      amountOfPeople,
+      name: name.value,
+      lastName: lastName.value,
+      email: email.value,
+      phone: phone.value,
+      amountOfPeople: amountOfPeople.value,
       date,
       time,
     };
@@ -56,9 +63,9 @@ export const FormReser = () => {
               label="Name"
               placeholder="Enter your name"
               fullWidth
-              isInvalid={isInvalid && !name.trim()}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              isInvalid={name.isInvalid}
+              value={name.value}
+              onChange={(e) => name.setValue(e.target.value)}
             />
           </div>
           <div className="w-full">
@@ -68,11 +75,12 @@ export const FormReser = () => {
               label="Last Name"
               placeholder="Enter your last name"
               fullWidth
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              isInvalid={lastName.isInvalid}
+              value={lastName.value}
+              onChange={(e) => lastName.setValue(e.target.value)}
             />
           </div>
-          <div className={`w-full ${isInvalid && !email.trim() ? 'border-red-500' : ''}`}>
+          <div className={`w-full ${email.isInvalid ? "border-red-500" : ""}`}>
             <Input
               size="sm"
               isRequired
@@ -80,9 +88,9 @@ export const FormReser = () => {
               label="Email"
               placeholder="Enter your email"
               fullWidth
-              isInvalid={isInvalid && !email.trim()}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              isInvalid={email.isInvalid}
+              value={email.value}
+              onChange={(e) => email.setValue(e.target.value)}
             />
           </div>
           <div className="w-full">
@@ -93,9 +101,9 @@ export const FormReser = () => {
               label="Number"
               placeholder="Enter your number"
               fullWidth
-              isInvalid={isInvalid && !phone.trim()}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              isInvalid={phone.isInvalid}
+              value={phone.value}
+              onChange={(e) => phone.setValue(e.target.value)}
             />
           </div>
 
@@ -108,9 +116,17 @@ export const FormReser = () => {
           </div>
         </form>
 
-        <form className="w-full lg:w-6/12 flex flex-col items-center p-4 lg:p-16 mt-10 lg:mt-0 mb-10 bg-cover bg-center bg-no-repeat shadow-lg"
-              style={{ backgroundImage: 'url(https://interioresminimalistas.com/wp-content/uploads/2019/01/restaurante-raco-de-larnau-de-carles-segarra-foto-david-zarzoso-0-960x816.jpg)', height: 'auto'}}>
-          <h2 className="font-semibold text-center text-2xl mb-5">Reservación</h2>
+        <form
+          className="w-full lg:w-6/12 flex flex-col items-center p-4 lg:p-16 mt-10 lg:mt-0 mb-10 bg-cover bg-center bg-no-repeat shadow-lg"
+          style={{
+            backgroundImage:
+              "url(https://interioresminimalistas.com/wp-content/uploads/2019/01/restaurante-raco-de-larnau-de-carles-segarra-foto-david-zarzoso-0-960x816.jpg)",
+            height: "auto",
+          }}
+        >
+          <h2 className="font-semibold text-center text-2xl mb-5">
+            Reservación
+          </h2>
           <div className="w-full mb-5">
             <Input
               size="sm"
@@ -119,9 +135,9 @@ export const FormReser = () => {
               label="Amount of people"
               placeholder="Enter the number of people"
               fullWidth
-              isInvalid={isInvalid && !amountOfPeople.trim()}
-              value={amountOfPeople}
-              onChange={(e) => setAmountOfPeople(e.target.value)}
+              isInvalid={amountOfPeople.isInvalid}
+              value={amountOfPeople.value}
+              onChange={(e) => amountOfPeople.setValue(e.target.value)}
               isDisabled={!isConfirmed}
             />
           </div>
@@ -134,7 +150,7 @@ export const FormReser = () => {
               startContent={<CalendarIcon />}
               className="w-full"
               value={date}
-              isInvalid={isInvalid && !date}
+              isInvalid={date === undefined}
               onChange={setDate}
               isDisabled={!isConfirmed}
             />
@@ -145,13 +161,13 @@ export const FormReser = () => {
               isRequired
               label="Event Time"
               value={time}
-              isInvalid={isInvalid && !time}
+              isInvalid={time === undefined}
               onChange={setTime}
               isDisabled={!isConfirmed}
             />
           </div>
 
-          {isConfirmed && !isInvalid && (
+          {isConfirmed && (
             <div className="w-full flex justify-center items-center">
               <Button
                 text="Enviar"

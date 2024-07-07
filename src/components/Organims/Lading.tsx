@@ -2,7 +2,7 @@ import { DividingLine } from "../../DividingLine";
 import tacos from "../../assets/img/tacos.png";
 import { Button } from "../Atoms/Button";
 import { Carrusel } from "../Molecules/Carrusel";
-import { Providers } from "../../ui/Providers";
+import { Providers } from "../../Tools/Providers";
 import { ThemeSwitcher } from "../../ui/ThemeSwitcher";
 import { DataLoader } from "../../ui/Spinner";
 import { FormReser } from "../Molecules/FormReser";

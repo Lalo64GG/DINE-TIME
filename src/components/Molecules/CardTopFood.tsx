@@ -1,6 +1,6 @@
 import { Card, CardBody, CardFooter, Image, Tabs, Tab } from "@nextui-org/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { useSortedFood } from '../../../public/Hooks/useSortedFood'; 
+import { useSortedFood } from '../../Tools/Hooks/useSortedFood'; 
 import { TopFood } from "../../types/typeFood";
 import { useNavigate } from "react-router-dom";
 

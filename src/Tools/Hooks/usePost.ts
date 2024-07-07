@@ -5,7 +5,6 @@ export const usePost = () => {
         ;
 
         if (Object.values(objectPost).some((value) => value === "")) {
-            alert("Error");
             return false;
           }
         

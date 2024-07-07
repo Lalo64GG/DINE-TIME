@@ -1,8 +1,8 @@
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { CardTopFood } from "../Molecules/CardTopFood";
-import { topRatedFood, AllFood, AllDrinks } from "../../data/data";
+// import { topRatedFood, AllFood, AllDrinks } from "../../data/data";
 import { CardFood } from "../Molecules/CardFood";
-import { useGet } from "../../../public/Hooks/useGet";
+import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
 
 export const Menu = () => {
@@ -36,7 +36,7 @@ export const Menu = () => {
       label: "Top Food",
       content: (
         <div>
-          <CardTopFood topFood={topRatedFood} />
+          {/* <CardTopFood topFood={topRatedFood} /> */}
         </div>
       ),
     },
