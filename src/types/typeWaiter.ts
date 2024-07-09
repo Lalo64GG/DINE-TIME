@@ -1,7 +1,8 @@
 export type Waiter  = {
-    name: string;
-    lastName: string;
-    jobTitle: string;
+    nombre: string;
+    apellido: string;
+    position: string;
     phone: string;
     email: string;
+    urlImage: string
   }

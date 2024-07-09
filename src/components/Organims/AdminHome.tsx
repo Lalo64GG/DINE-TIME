@@ -1,9 +1,10 @@
 import { Graphics } from "../Molecules/Graphics";
+import { RenderWaiterCards } from "../Molecules/RenderWaitersCards";
 
 export const AdminHome = () => {
   const currentDate = new Date().toLocaleDateString();
 
-  const nameAdm = "Mari"
+  const nameAdm = "Eduardo"
   return (
     <div className="container mx-auto p-4 bg-white rounded-md shadow-2xl my-10">
       <h1 className="text-3xl font-bold mb-4">Bienvenid@ { nameAdm } </h1>
@@ -13,14 +14,10 @@ export const AdminHome = () => {
         <Graphics />
       </div>
 
-      <div className="">
-        <h1 className="text-center text-2xl font-bold">Meseros</h1>
-        <div className=" flex mx-10 p-10">
-        <div className=" bg-red-500 w-10 h-10"></div>
-        <div className=" bg-red-500 w-10 h-10"></div>
-        <div className=" bg-red-500 w-10 h-10"></div>
-        <div className=" bg-red-500 w-10 h-10"></div>
-        <div className=" bg-red-500 w-10 h-10"></div>
+      <div className="my-10">
+        <h1 className=" mb-10 text-center text-2xl font-bold">Meseros</h1>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <RenderWaiterCards />
         </div>
       </div>
     </div>

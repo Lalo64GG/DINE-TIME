@@ -64,7 +64,7 @@ export const Form = () => {
       return;
     }
 
-    const url = 'http://localhost:3000/API/admin'; 
+    const url = import.meta.env.API_URL; 
     const objectPost = {
       nombre: name.value,
       apellido: lastName.value,
@@ -73,7 +73,7 @@ export const Form = () => {
     }; 
 
     try {
-      const success = await handlePress(url, objectPost);
+      const success = await handlePress(`${url}/admin`, objectPost);
       if (success) {
         setAlert({ message: "Registro exitoso", type: 'success' });
       } else {

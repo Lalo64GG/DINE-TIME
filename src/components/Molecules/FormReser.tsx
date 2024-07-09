@@ -3,9 +3,15 @@ import { CalendarDate, parseDate, parseTime } from "@internationalized/date";
 import { CalendarIcon } from "../../ui/svg/CalendarIcon";
 import { Button } from "../Atoms/Button";
 import { useState } from "react";
-import { useInputValidation } from "../../Tools/Hooks/useInputValidation"; // Importar el hook de validación
+import { useInputValidation } from "../../Tools/Hooks/useInputValidation";
+import { usePost } from "../../Tools/Hooks/usePost";
+import { Alert } from "../../ui/Alert"
 
 export const FormReser = () => {
+
+  const { handlePress } = usePost();
+  const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error'  } | null>(null)
+
   const name = useInputValidation("");
   const lastName = useInputValidation("");
   const email = useInputValidation("");
@@ -30,28 +36,46 @@ export const FormReser = () => {
       !phone.value.trim()
     ) {
       setIsConfirmed(false);
+      setAlert({ message: "Por favor, llena todos los campos", type: "error" });
     } else {
       setIsConfirmed(true);
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
+
+    const url = import.meta.env.VITE_API_URL;
+    console.log(url)
+
     const data = {
-      name: name.value,
-      lastName: lastName.value,
+      nombre: name.value,
+      apellido: lastName.value,
       email: email.value,
       phone: phone.value,
-      amountOfPeople: amountOfPeople.value,
-      date,
-      time,
+      amountOfPeople: parseInt(amountOfPeople.value),
+      dia:date.toString(),
+      hora:time.toString(),
     };
+    try{
+      const success = await handlePress(`${url}/reservaciones `, data);
+      if(!success){
+        setAlert({ message: "Error al validar los datos", type: "error" });
+        return;
+      } 
 
-    // Replace with your API call
-    console.log("Submitting data to API:", data);
+      setAlert({ message: "Reservación exitosa", type: "success" });
+
+    }catch(error:any){
+
+    }
+
+
+
   };
 
   return (
     <div className="flex justify-center items-center w-full lg:w-[80%] mx-auto">
+      {alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
       <div className="w-full flex flex-col lg:flex-row items-center lg:items-start lg:gap-10">
         <form className="w-full p-4 lg:w-6/12 flex flex-col justify-center items-center mb-10 lg:mb-10 lg:px-16 rounded-lg space-y-5 bg-white shadow-lg">
           <h2 className="font-semibold text-center text-2xl">Contacto</h2>

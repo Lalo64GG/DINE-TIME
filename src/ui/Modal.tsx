@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { InputConfig, FooterButtonConfig } from "../types/configTypes";
 import {
   Modal,
   ModalContent,
@@ -7,66 +8,51 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Checkbox,
   Input,
-  Link,
   Avatar,
-  ModalProps,
 } from "@nextui-org/react";
 
-interface InputConfig {
-  label: string;
-  placeholder: string;
-  type?: string;
-  props?: Record<string, any>;
-}
-
-interface FooterButtonConfig {
-  label: string;
-  color: "primary" | "secondary" | "success" | "warning" | "danger";
-  variant?: "solid" | "flat" | "ghost";
-  onClick: () => void;
-}
-
-interface ModalUiProps {
+type ModalUiProps = {
   buttonLabel?: string;
   modalTitle?: string;
   inputsConfig: Record<string, InputConfig>;
-  showCheckbox?: boolean;
-  checkboxLabel?: string;
   footerButtons?: FooterButtonConfig[];
-  linkText?: string;
-  linkHref?: string;
-  onSubmit?: () => void;
+  onSubmit?: (formData: Record<string, any>) => void;
   photoIsRequired: boolean;
-}
+};
 
 export const ModalUi = ({
   buttonLabel = "Open Modal",
   modalTitle = "Form",
   inputsConfig = {},
-  showCheckbox = true,
-  checkboxLabel = "",
   footerButtons = [
     { label: "Close", color: "danger", variant: "flat", onClick: () => {} },
     { label: "Submit", color: "primary", onClick: () => {} },
   ],
-  linkText = "",
-  linkHref = "#",
   onSubmit,
   photoIsRequired,
 }: ModalUiProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [formData, setFormData] = useState<Record<string, any>>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const renderInputs = (inputsConfig: Record<string, InputConfig>) => {
     return Object.entries(inputsConfig).map(([key, input], index) => (
       <Input
         key={key}
+        name={key}
         autoFocus={index === 0}
         label={input.label}
         placeholder={input.placeholder}
         type={input.type || "text"}
         variant="bordered"
+        onChange={handleChange}
         {...input.props} // Pasar props adicionales al Input
       />
     ));
@@ -74,7 +60,7 @@ export const ModalUi = ({
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
+      <Button onPress={onOpen} className="bg-[#8E0000] text-white">
         {buttonLabel}
       </Button>
       <Modal
@@ -86,26 +72,15 @@ export const ModalUi = ({
         <ModalContent>
           {(onClose) => (
             <>
-              {
-              photoIsRequired && 
-              <div className="flex justify-center items-center mt-10">
-                <Avatar size="lg" />
-              </div>
-
-              }
+              {photoIsRequired && (
+                <div className="flex justify-center items-center mt-10">
+                  <Avatar size="lg" />
+                </div>
+              )}
               <ModalHeader className="flex flex-col gap-1">
                 {modalTitle}
               </ModalHeader>
-              <ModalBody>
-                {renderInputs(inputsConfig)}
-                {showCheckbox && (
-                  <div className="flex py-2 px-1 justify-between">
-                    <Link color="primary" href={linkHref} size="sm">
-                      {linkText}
-                    </Link>
-                  </div>
-                )}
-              </ModalBody>
+              <ModalBody>{renderInputs(inputsConfig)}</ModalBody>
               <ModalFooter>
                 {footerButtons.map((button, index) => (
                   <Button
@@ -114,6 +89,9 @@ export const ModalUi = ({
                     variant={button.variant || "solid"}
                     onPress={() => {
                       button.onClick();
+                      if (button.label === "Submit" && onSubmit) {
+                        onSubmit(formData);
+                      }
                       onClose();
                     }}
                   >

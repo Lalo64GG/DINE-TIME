@@ -42,10 +42,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/home",
-        element: <ProtectedRoute element={<AdminHome />} />, // Ruta protegida
+        element: <ProtectedRoute element = { <AdminHome /> } /> , // Ruta protegida
       },
       {
-        path: "/admin/menu",
+        path: "/admin/waiters",
         element: <Waiters />, // Ruta protegida
       },
     ],
