@@ -36,9 +36,7 @@ export const CardWaiter = ({ waitersData }: CardWaiterProps) => {
               Email: <span className="text-sm font-normal">{waiter.email}</span>
             </p>
             <div className="flex justify-center items-center mt-4 gap-x-4">
-              <Button color="primary" variant="solid">
-                Editar
-              </Button>
+              <Button variant="solid">Editar</Button>
               <Button color="danger" variant="flat">
                 Eliminar
               </Button>

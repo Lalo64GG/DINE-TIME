@@ -8,13 +8,19 @@ import { useGet } from "../../Tools/Hooks/useGet";
 import { CardWaiter } from "../Molecules/CardWaiter";
 import { DataLoader } from "../../ui/Spinner";
 
+const url = import.meta.env.VITE_API_URL;
+
 export const Waiters = () => {
-  const url = import.meta.env.VITE_API_URL;
   const { handlePress } = usePost();
   const [alert, setAlert] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
+
+  const token = localStorage.getItem('token'); // Obtener token desde localStorage
+  if (!token) {
+    return;
+  }
 
   const handleSubmit = async (formData: Record<string, any>) => {
     const { photo, ...rest } = formData;
@@ -23,8 +29,9 @@ export const Waiters = () => {
       urlImg: photo,
     };
 
+ 
     try {
-      const success = await handlePress(`${url}/mesero`, formDataWithUrlImg);
+      const success = await handlePress(`${url}/mesero`, formDataWithUrlImg, token );
       console.log(success);
 
       if (!success) {
@@ -38,7 +45,7 @@ export const Waiters = () => {
     }
   };
 
-  const { data } = useGet(`${url}/mesero`);
+  const { data } = useGet(`${url}/mesero`, token);
 
   return (
     <div className="p-5">

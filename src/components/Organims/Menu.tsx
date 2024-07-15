@@ -1,5 +1,5 @@
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
-import { CardTopFood } from "../Molecules/CardTopFood";
+// import { CardTopFood } from "../Molecules/CardTopFood";
 // import { topRatedFood, AllFood, AllDrinks } from "../../data/data";
 import { CardFood } from "../Molecules/CardFood";
 import { useGet } from "../../Tools/Hooks/useGet";
@@ -10,24 +10,18 @@ export const Menu = () => {
   const {
     data: allDrinks,
     loading: loadingDrinks,
-    error: errorDrinks,
   } = useGet(
-    "http://localhost:3000/API/categorias/e8ffbbfa-2368-48ff-87c7-235b3a5ec68a"
+    "http://localhost:3000/API/categorias/f829e5c7-9fd2-4f85-a143-d6ded29142ba"
   );
   const {
     data: allFood,
     loading: loadingFood,
-    error: errorFood,
   } = useGet(
     "http://localhost:3000/API/categorias/35cc5a54-907b-4cfe-809e-1a1f3e784edd"
   );
 
   if (loadingDrinks || loadingFood) {
-    return <div>Loading...</div>;
-  }
-
-  if (errorDrinks || errorFood) {
-    return <div>Something went wrong...</div>;
+    return <DataLoader/>;
   }
 
   let tabs = [

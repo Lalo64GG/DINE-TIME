@@ -1,8 +1,21 @@
 import { Graphics } from "../Molecules/Graphics";
 import { RenderWaiterCards } from "../Molecules/RenderWaitersCards";
+import { useGet } from "../../Tools/Hooks/useGet";
+import { DataLoader } from "../../ui/Spinner";
+import { RenderTable } from "../Molecules/RenderTables";
+
+const url = import.meta.env.VITE_API_URL;
 
 export const AdminHome = () => {
   const currentDate = new Date().toLocaleDateString();
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return;
+  }
+
+  const { data } = useGet(`${url}/mesero`, token)
+  const { data: dataTable } = useGet(`${url}/mesas`,token);
 
   const nameAdm = "Eduardo"
   return (
@@ -15,10 +28,17 @@ export const AdminHome = () => {
       </div>
 
       <div className="my-10">
-        <h1 className=" mb-10 text-center text-2xl font-bold">Meseros</h1>
+        <h2 className=" mb-10 text-center text-2xl font-bold">Meseros</h2>
         <div className="flex flex-wrap gap-4 justify-center">
-          <RenderWaiterCards />
+           { data ? <RenderWaiterCards waitersData={data}/> : <DataLoader /> }
         </div>
+      </div>
+
+      <div className="my-10">
+      <h2 className=" mb-10 text-center text-2xl font-bold">Mesas</h2>
+      <div className=" flex flex-wrap gap-4 justify-center">
+        { dataTable ? <RenderTable tableData={dataTable}/> :  <DataLoader /> }
+      </div>
       </div>
     </div>
   );

@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { waitersData } from "../../data/data";
 import { Avatar, Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
+import { Waiter } from "../../types/typeWaiter";
 
-export const RenderWaiterCards = () => {
+type RenderWaiterCardsProps = {
+
+  waitersData: Waiter[]
+
+}
+
+export const RenderWaiterCards = ({ waitersData }: RenderWaiterCardsProps) => {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedWaiter, setSelectedWaiter] = useState<any>(null);
   const navigate = useNavigate()
@@ -30,19 +36,19 @@ export const RenderWaiterCards = () => {
           className={`w-56 h-64 p-4 bg-gradient-to-b from-customRed to-customDarkRed text-white relative rounded-md shadow-2xl transform transition-transform hover:cursor-pointer ${
             index === 0 ? "" : 
             index === 1 ? " blur-sm" : 
-            " blur-sm"
+            " blur-md"
           }`}
           onClick={() => handleCardClick(waiter)}
         >
           <div className="flex justify-center">
-            <Avatar size="md" className="absolute top-4 shadow-md" src={waiter.img} />
+            <Avatar size="md" className="absolute top-4 shadow-md" src={waiter.urlImage} />
           </div>
           <h4 className="mt-14 text-center text-base font-semibold">
-            {waiter.name}
+            {waiter.nombre}
           </h4>
           <p className="mb-1 text-center font-semibold">
             Puesto:{" "}
-            <span className="text-sm font-normal">{waiter.jobTitle}</span>
+            <span className="text-sm font-normal">{waiter.position}</span>
           </p>
           <p className="mb-1 text-center">
             No. Telefónico:{" "}
@@ -59,7 +65,7 @@ export const RenderWaiterCards = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <p className="text-lg font-semibold mb-2">
-              ¿Desea ver más información de {selectedWaiter.name}?
+              ¿Desea ver más información de {selectedWaiter.nombre}?
             </p>
             <div className="flex justify-end gap-x-4">
               <Button

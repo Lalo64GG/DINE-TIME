@@ -46,8 +46,8 @@ export const CardFood = ({ data }: CardFoodProps) => {
             onSelectionChange={handleSelectionChange}
           >
             <Tab key="Agua" title="Aguas" />
-            <Tab key="Cervezas" title="Cervezas" />
-            <Tab key="Refrescos" title="Refrescos" />
+            <Tab key="Cerveza" title="Cervezas" />
+            <Tab key="Refresco" title="Refrescos" />
           </Tabs>
         </div>
       )}

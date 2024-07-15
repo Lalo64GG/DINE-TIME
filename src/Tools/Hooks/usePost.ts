@@ -1,28 +1,39 @@
 export const usePost = () => {
   const apiKey = import.meta.env.VITE_API_KEY;
 
-  const handlePress = async (url: string, objectPost: object) => {
+  const handlePress = async (url: string, objectPost: object, token?: string) => {
     if (Object.values(objectPost).some((value) => value === "")) {
       return false;
     }
 
     try {
+      const headers: { [key: string]: string } = {
+        "Content-Type": "application/json",
+        "x-api-key": `${apiKey}`,
+      };
+
+      if (token) {
+        headers["Authorization"] = ` ${token}`;
+      }
+
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": `${apiKey}`,
-        },
+        headers: headers,
         body: JSON.stringify(objectPost),
       });
 
-      console.log(await response.json());
-
+      const data = await response.json();
       if (!response.ok) throw new Error("Error en la petición POST");
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        console.log("Token guardado", data.token)
+      }
 
       return true;
     } catch (error) {
-      console.error(error);
+      if(error instanceof Error)
+      console.error(error.message);
     }
   };
 

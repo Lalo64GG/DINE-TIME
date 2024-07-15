@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {useInputValidation} from "../Tools/Hooks/useInputValidation";
 import {Alert} from "../ui/Alert";
 import { useAuth } from "../Tools/AuthContextType"; 
+const url = import.meta.env.VITE_API_URL;
 
 export const Form = () => {
   const [selected, setSelected] = useState("login");
@@ -30,21 +31,19 @@ export const Form = () => {
     if (email.isInvalid || password.isInvalid) {
       return;
     }
-
-    const url = 'http://localhost:3000/API/auth/login';
     const objectPost = {
       correo: email.value,
       password: password.value,
     };
 
     try {
-      const success = await handlePress(url, objectPost);
+      const success = await handlePress(`${url}/auth/login`, objectPost);
       if (success) {
         setAlert({ message: "Login exitoso", type: 'success' });
         login(); // Actualizar el estado de autenticación
         setTimeout(() => {
           navigate("/admin/home");
-        }, 2000)
+        }, 1500)
       } else {
         setAlert({ message: "Correo y/o contraseña incorrecta", type: 'error' });
       }

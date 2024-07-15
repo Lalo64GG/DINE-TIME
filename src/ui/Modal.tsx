@@ -11,6 +11,7 @@ import {
   Input,
   Avatar,
 } from "@nextui-org/react";
+import { useInputValidation } from "../Tools/Hooks/useInputValidation"; // Asegúrate de importar el hook
 
 type ModalUiProps = {
   buttonLabel?: string;
@@ -35,27 +36,53 @@ export const ModalUi = ({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formData, setFormData] = useState<Record<string, any>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Initialize validation hooks for each input
+  const validationStates = Object.keys(inputsConfig).reduce((acc, key) => {
+    acc[key] = useInputValidation("");
+    return acc;
+  }, {} as Record<string, ReturnType<typeof useInputValidation>>);
+
+  const handleChange = (key: string, value: string) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [key]: value,
     });
+    validationStates[key].setValue(value);
   };
 
   const renderInputs = (inputsConfig: Record<string, InputConfig>) => {
-    return Object.entries(inputsConfig).map(([key, input], index) => (
-      <Input
-        key={key}
-        name={key}
-        autoFocus={index === 0}
-        label={input.label}
-        placeholder={input.placeholder}
-        type={input.type || "text"}
-        variant="bordered"
-        onChange={handleChange}
-        {...input.props} // Pasar props adicionales al Input
-      />
-    ));
+    return Object.entries(inputsConfig).map(([key, input], index) => {
+      const validationState = validationStates[key];
+
+      return (
+        <Input
+          key={key}
+          name={key}
+          autoFocus={index === 0}
+          label={input.label}
+          placeholder={input.placeholder}
+          type={input.type || "text"}
+          value={validationState.value}
+          onChange={(e) => handleChange(key, e.target.value)}
+          isInvalid={validationState.isInvalid}
+          isRequired={true}
+        />
+      );
+    });
+  };
+
+  const handleSubmit = () => {
+    let isValid = true;
+    Object.values(validationStates).forEach((validationState) => {
+      validationState.validate();
+      if (validationState.isInvalid) {
+        isValid = false;
+      }
+    });
+
+    if (isValid && onSubmit) {
+      onSubmit(formData);
+    }
   };
 
   return (
@@ -88,11 +115,12 @@ export const ModalUi = ({
                     color={button.color}
                     variant={button.variant || "solid"}
                     onPress={() => {
-                      button.onClick();
-                      if (button.label === "Submit" && onSubmit) {
-                        onSubmit(formData);
+                      if (button.label === "Submit") {
+                        handleSubmit();
+                      } else {
+                        button.onClick();
+                        onClose();
                       }
-                      onClose();
                     }}
                   >
                     {button.label}

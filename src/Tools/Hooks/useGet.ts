@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useGet = (url : string) => {
+export const useGet = (url : string, token?: string) => {
 
   const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -11,15 +11,21 @@ export const useGet = (url : string) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        const headers: { [key: string]: string } = {
+          "Content-Type": "application/json",
+          "x-api-key": `${apiKey}`,
+        };
+
+        if (token) {
+          headers["Authorization"] = ` ${token}`;
+        }
+
         const res = await fetch(url, {
-          headers: {
-           'x-api-key': `${apiKey}`
-          }
+            headers: headers,
         });
         const data = await res.json();
-
-        console.log(data);
-
+        
         setData(data);
         setLoading(false);
       } catch (error) {
