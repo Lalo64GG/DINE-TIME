@@ -12,9 +12,11 @@ import { useNavigate } from "react-router-dom";
 
 type CardFoodProps = {
   data: Categoria;
+  isRequiredTabs: boolean;
+  isRequiredNavigate: boolean;
 };
 
-export const CardFood = ({ data }: CardFoodProps) => {
+export const CardFood = ({ data, isRequiredTabs, isRequiredNavigate }: CardFoodProps) => {
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState<string>("");
 
@@ -37,7 +39,7 @@ export const CardFood = ({ data }: CardFoodProps) => {
 
   return (
     <div>
-      {shouldShowTabs && (
+      {shouldShowTabs && isRequiredTabs && (
         <div className="lg:w-[25%]">
           <Tabs
             fullWidth
@@ -58,7 +60,7 @@ export const CardFood = ({ data }: CardFoodProps) => {
             shadow="sm"
             key={index}
             isPressable
-            onPress={() => navigate(`/food/${item.id}`)}
+            onPress={isRequiredNavigate ? () => navigate(`/food/${item.id}`) : undefined}
           >
             <CardBody className="overflow-visible p-0">
               <Image

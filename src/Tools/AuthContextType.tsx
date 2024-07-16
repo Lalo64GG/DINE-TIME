@@ -14,6 +14,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Check if token exists in localStorage
     const token = localStorage.getItem('token');
+    console.log(token);
     if (token) {
       setIsAuthenticated(true);
     }

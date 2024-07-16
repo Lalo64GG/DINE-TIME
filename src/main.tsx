@@ -13,6 +13,7 @@ import { Waiters } from "./components/Organims/Waiters";
 import { ProtectedRoute } from "./Tools/ProtectedRoute"; // Importa el componente de ruta protegida
 import { AuthProvider } from "./Tools/AuthContextType"; // Importa el proveedor de autenticación
 import {Tables} from "./components/Organims/Tables";
+import { Food } from "./components/Organims/Food";
 
 const router = createBrowserRouter([
   {
@@ -43,15 +44,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/home",
-        element:  <AdminHome /> ,
+        element:  <ProtectedRoute element={<AdminHome />} />,
       },
       {
         path: "/admin/waiters",
-        element: <Waiters />,
+        element: <ProtectedRoute element={<Waiters />} />,
       },
       {
         path: "/admin/tables",
-        element: <Tables/>
+        element: <ProtectedRoute element={<Tables/>}/>
+      },
+      {
+        path: "/admin/food/",
+        element: <Food/>
       }
     ],
   },

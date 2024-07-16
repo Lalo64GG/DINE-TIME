@@ -3,6 +3,7 @@ import { RenderWaiterCards } from "../Molecules/RenderWaitersCards";
 import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
 import { RenderTable } from "../Molecules/RenderTables";
+import { useAdminInfo } from "../../Tools/Hooks/useAdminInfo";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -16,11 +17,11 @@ export const AdminHome = () => {
 
   const { data } = useGet(`${url}/mesero`, token)
   const { data: dataTable } = useGet(`${url}/mesas`,token);
+  const { adminInfo } = useAdminInfo();
 
-  const nameAdm = "Eduardo"
   return (
     <div className="container mx-auto p-4 bg-white rounded-md shadow-2xl my-10">
-      <h1 className="text-3xl font-bold mb-4">Bienvenid@ { nameAdm } </h1>
+      <h1 className="text-3xl font-bold mb-4">Bienvenid@ { adminInfo?.administrador.nombre } </h1>
       <p className="text-gray-600 mb-8">Fecha: {currentDate}</p>
       <div className=" mt-10 mb-16 ">
         <h2 className= " text-center text-2xl font-bold">Graficas</h2>

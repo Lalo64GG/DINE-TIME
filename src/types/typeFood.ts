@@ -4,6 +4,7 @@ export type Food = {
     precio: number
     categoriaId?: string 
     img?: string,
+    tipo?: string
     createdAt: string
 }
 

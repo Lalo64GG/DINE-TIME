@@ -5,19 +5,21 @@ import { CardFood } from "../Molecules/CardFood";
 import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
 
+const url = import.meta.env.VITE_API_URL;
+
 export const Menu = () => {
   // const { data: topRatedFood, loading: loadingTopFood, error: errorTopFood } = useGet("/api/top-rated-food");
   const {
     data: allDrinks,
     loading: loadingDrinks,
   } = useGet(
-    "http://localhost:3000/API/categorias/f829e5c7-9fd2-4f85-a143-d6ded29142ba"
+    `${url}/categorias/68af9a39-e9a7-4361-b8b7-68ebe19b5636`
   );
   const {
     data: allFood,
     loading: loadingFood,
   } = useGet(
-    "http://localhost:3000/API/categorias/35cc5a54-907b-4cfe-809e-1a1f3e784edd"
+    `${url}/categorias/5ce27342-ba9b-4d7a-8d38-a5efc11d9032`
   );
 
   if (loadingDrinks || loadingFood) {
@@ -38,14 +40,14 @@ export const Menu = () => {
       id: "drinks",
       label: "Drinks",
       content: (
-        <div>{allDrinks ? <CardFood data={allDrinks} /> : <DataLoader />}</div>
+        <div>{allDrinks ? <CardFood data={allDrinks} isRequiredTabs={true} isRequiredNavigate={true} /> : <DataLoader />}</div>
       ),
     },
     {
       id: "food",
       label: "Food",
       content: (
-        <div>{allFood ? <CardFood data={allFood} /> : <DataLoader />}</div>
+        <div>{allFood ? <CardFood data={allFood} isRequiredTabs={false} isRequiredNavigate={true} /> : <DataLoader />}</div>
       ),
     },
   ];

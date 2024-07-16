@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Waiter } from "../../types/typeWaiter";
 
 type RenderWaiterCardsProps = {
-
   waitersData: Waiter[]
-
 }
+
+
 
 export const RenderWaiterCards = ({ waitersData }: RenderWaiterCardsProps) => {
   const [showAlert, setShowAlert] = useState(false);

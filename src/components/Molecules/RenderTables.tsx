@@ -19,50 +19,46 @@ export const RenderTable = ({ tableData }: RenderWaiterCardsProps) => {
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
-    navigate("/admin/waiters");
+    navigate("/admin/tables");
   };
 
   const handleAlertCancel = () => {
     setShowAlert(false);
   };
 
-
-  console.log(tableData.mesa)
-
   return (
     <div className="flex flex-wrap justify-center gap-4">
       {tableData.mesa && tableData.mesa.length > 0 ? (
         tableData.mesa.slice(0, 4).map((table, index) => (
           <div
-            key={index}
-            className={`w-56 h-64 p-4 bg-gradient-to-b from-customRed to-customDarkRed text-white relative rounded-md shadow-2xl transform transition-transform hover:cursor-pointer ${
-              index === 0
-                ? ""
-                : index === 1
-                ? " blur-sm"
-                : " blur-md"
-            }`}
-            onClick={() => handleCardClick(table)}
-          >
-            <div className="flex justify-center">
-              <Avatar
-                size="md"
-                className="absolute top-4 shadow-md"
-                src={
-                  table.imgSrc
-                    ? table.imgSrc
-                    : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
-                }
-              />
-            </div>
-            <h4 className="mt-14 text-center text-base font-semibold">
-              {table.num_mesa}
-            </h4>
-            <p className=" font-semibold text-white">
-              Capcidad:{" "}
-              <span className="mt-2 font-normal">{table.num_sillas}</span>
-            </p>
-          </div>
+          key={table.id}
+          className={`w-56 h-64 p-4 bg-gradient-to-b from-customRed to-customDarkRed text-white relative rounded-md shadow-2xl transform transition-transform hover:cursor-pointer ${
+            index === 0
+              ? ""
+              : index === 1
+              ? " blur-sm"
+              : " blur-md"
+          }`}
+          onClick={() => handleCardClick(table)}
+        >
+          <img
+            src={
+              table.imgSrc
+                ? table.imgSrc
+                : "https://img.freepik.com/vector-premium/vector-icono-imagen-predeterminado-pagina-imagen-faltante-diseno-sitio-web-o-aplicacion-movil-no-hay-foto-disponible_87543-11093.jpg"
+            }
+            alt={table.num_mesa}
+            className="w-40 h-40 object-contain"
+          />
+          <p className="mt-2 text-center text-white">
+            No. Mesa {" "}
+            <span className="mt-2 font-normal">{table.num_mesa}</span>
+          </p>
+          <p className=" font-semibold text-white">
+            Capcidad:{" "}
+            <span className="mt-2 font-normal">{table.num_sillas}</span>
+          </p>
+        </div>
         ))
       ) : (
         <p className="text-center text-lg">No hay tablas registradas</p>

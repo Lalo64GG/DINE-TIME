@@ -6,10 +6,21 @@ import { Providers } from "../../Tools/Providers";
 import { ThemeSwitcher } from "../../ui/ThemeSwitcher";
 import { DataLoader } from "../../ui/Spinner";
 import { FormReser } from "../Molecules/FormReser";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export const Lading = () => {
 
+  const location = useLocation();
 
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
 
   let activateSpinner = true;
 
@@ -69,7 +80,7 @@ export const Lading = () => {
       <Carrusel />
       </div>
 
-      <div>
+      <div id="form-reservation">
         <h2 className="text-center font-bold text-2xl">¡Haz tu Reserva!</h2>
         <p className=" text-center font-semibold mb-5">y no pierdas tiempo esperando </p>
         <FormReser/>

@@ -48,3 +48,33 @@ export const tablesFormConfig = {
     isRequired: true,
   },
 };
+
+export const foodFormConfig = {
+  nombre: {
+    label: "Name",
+    placeholder: "Enter the name of the food",
+    isRequired: true,
+  },
+  precio: {
+    label: "Price",
+    placeholder: "Enter the price of the food",
+    type: "number",
+    isRequired: true,
+  },
+  tipo: {
+    label: "Type",
+    placeholder: "Enter the type of the food (drink or food)",
+    isRequired: true,
+  },
+  categoria: {
+    label: "Category",
+    placeholder: "Enter the category of the food",
+    isRequired: true,
+  },
+  urlimg: {
+    label: "Image URL",
+    placeholder: "Enter the URL of the food's image",
+    type: "url",
+    isRequired: true,
+  }
+}

@@ -2,6 +2,9 @@ export const usePost = () => {
   const apiKey = import.meta.env.VITE_API_KEY;
 
   const handlePress = async (url: string, objectPost: object, token?: string) => {
+
+    console.log(objectPost)
+
     if (Object.values(objectPost).some((value) => value === "")) {
       return false;
     }
@@ -27,8 +30,13 @@ export const usePost = () => {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
-        console.log("Token guardado", data.token)
       }
+
+      if(data.uid) {
+        localStorage.setItem("uid", data.uid);
+      }
+
+      console.log(response)
 
       return true;
     } catch (error) {
