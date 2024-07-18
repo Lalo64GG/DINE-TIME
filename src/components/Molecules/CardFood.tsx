@@ -1,36 +1,32 @@
 import { useState } from "react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Image,
-  Tabs,
-  Tab,
-} from "@nextui-org/react";
-import { Categoria, Drinks } from "../../types/typeFood";
+import { Card, CardBody, CardFooter, Image, Tabs, Tab } from "@nextui-org/react";
+import { Categoria, Drinks, Food } from "../../types/typeFood";
 import { useNavigate } from "react-router-dom";
 
 type CardFoodProps = {
-  data: Categoria;
+  data: Categoria | undefined;
   isRequiredTabs: boolean;
   isRequiredNavigate: boolean;
+  onOrder: (item: Food | Drinks) => void;
 };
 
-export const CardFood = ({ data, isRequiredTabs, isRequiredNavigate }: CardFoodProps) => {
+export const CardFood = ({ data, isRequiredTabs, isRequiredNavigate, onOrder }: CardFoodProps) => {
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState<string>("");
+
+  if (!data || !data.productos) {
+    return <div>No data available</div>;
+  }
 
   const handleSelectionChange = (key: any) => {
     setSelectedType(key);
   };
 
-  // Verificar si algún producto tiene el tipo 'Agua', 'Cerveza' o 'Refresco'
   const shouldShowTabs = data.productos.some(
     (producto) =>
       ["Agua", "Cerveza", "Refresco"].includes((producto as Drinks).tipo)
   );
 
-  // Filtrar los elementos según el tipo seleccionado
   const filteredData = selectedType
     ? data.productos.filter(
         (item) => "tipo" in item && item.tipo === selectedType
@@ -60,7 +56,11 @@ export const CardFood = ({ data, isRequiredTabs, isRequiredNavigate }: CardFoodP
             shadow="sm"
             key={index}
             isPressable
-            onPress={isRequiredNavigate ? () => navigate(`/food/${item.id}`) : undefined}
+            onPress={
+              isRequiredNavigate 
+              ? () => navigate(`/food/${item.id}`) 
+              : () => onOrder(item)
+            }
           >
             <CardBody className="overflow-visible p-0">
               <Image

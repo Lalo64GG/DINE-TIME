@@ -14,6 +14,7 @@ import { ProtectedRoute } from "./Tools/ProtectedRoute"; // Importa el component
 import { AuthProvider } from "./Tools/AuthContextType"; // Importa el proveedor de autenticación
 import {Tables} from "./components/Organims/Tables";
 import { Food } from "./components/Organims/Food";
+import {OrderTakingView } from "./components/Organims/OrderTakingView"
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         path: "/food/:id",
         element: <FoodId />,
       },
+       {
+      path:"/task",
+       element: <OrderTakingView />,
+      }
     ],
   },
   {
@@ -57,9 +62,16 @@ const router = createBrowserRouter([
       {
         path: "/admin/food/",
         element: <Food/>
-      }
+      },
+      
+     
     ],
+  
   },
+  // {
+  //   path:"/waiter/task",
+  //   element: <ProtectedRoute element={<OrderTakingView />} />,
+  // }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
