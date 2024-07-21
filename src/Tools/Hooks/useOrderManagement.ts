@@ -4,7 +4,7 @@ import { Food, Drinks, Item } from "../../types/typeFood";
 type Order = {
   id: string;
   items: Item[];
-  table: number;
+  table: string;
 }
 
 export const useOrderManagement = (initialOrders: Order[] = []) => {
@@ -20,42 +20,33 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
     localStorage.setItem("orders", JSON.stringify(orders));
   }, [orders]);
 
-  const getNextTableNumber = () => {
-    const highestTable = orders.reduce(
-      (max, order) => Math.max(max, order.table),
-      0
-    );
-    return highestTable + 1;
-  };
-
   const handleNewOrder = () => {
     const newOrder = {
       id: Date.now().toString(),
       items: [],
-      table: getNextTableNumber(),
+      table: "",
     };
-    setOrders([...orders, newOrder]);
     setSelectedOrder(newOrder);
+    setOrders([...orders, newOrder]);
   };
 
   const handleAddToOrder = (item: Food | Drinks) => {
-    if (selectedOrder) {
-      const existingItem = selectedOrder.items.find(
-        (i) => i.item.id === item.id
-      );
-      const updatedItems = existingItem
-        ? selectedOrder.items.map((i) =>
-            i.item.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-          )
-        : [...selectedOrder.items, { item, quantity: 1 }];
+    if (!selectedOrder) return;
+    const existingItem = selectedOrder.items.find(
+      (i) => i.item.id === item.id
+    );
+    const updatedItems = existingItem
+      ? selectedOrder.items.map((i) =>
+          i.item.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        )
+      : [...selectedOrder.items, { item, quantity: 1 }];
 
-      const updatedOrder = { ...selectedOrder, items: updatedItems };
-      const updatedOrders = orders.map((order) =>
-        order.id === selectedOrder.id ? updatedOrder : order
-      );
-      setOrders(updatedOrders);
-      setSelectedOrder(updatedOrder);
-    }
+    const updatedOrder = { ...selectedOrder, items: updatedItems };
+    const updatedOrders = orders.map((order) =>
+      order.id === selectedOrder.id ? updatedOrder : order
+    );
+    setOrders(updatedOrders);
+    setSelectedOrder(updatedOrder);
   };
 
   const handleSelectOrder = (order: Order) => {
@@ -63,14 +54,24 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
   };
 
   const handleRemoveItem = (item: Food | Drinks) => {
-    if (selectedOrder) {
-      const updatedItems = selectedOrder.items
-        .map((i) =>
-          i.item.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
-        )
-        .filter((i) => i.quantity > 0);
+    if (!selectedOrder) return;
+    const updatedItems = selectedOrder.items
+      .map((i) =>
+        i.item.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+      )
+      .filter((i) => i.quantity > 0);
 
-      const updatedOrder = { ...selectedOrder, items: updatedItems };
+    const updatedOrder = { ...selectedOrder, items: updatedItems };
+    const updatedOrders = orders.map((order) =>
+      order.id === selectedOrder.id ? updatedOrder : order
+    );
+    setOrders(updatedOrders);
+    setSelectedOrder(updatedOrder);
+  };
+
+  const updateOrderTable = (table: string) => {
+    if (selectedOrder) {
+      const updatedOrder = { ...selectedOrder, table };
       const updatedOrders = orders.map((order) =>
         order.id === selectedOrder.id ? updatedOrder : order
       );
@@ -93,6 +94,7 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
     handleAddToOrder,
     handleSelectOrder,
     handleRemoveItem,
-    calculateTotal
+    calculateTotal,
+    updateOrderTable,
   };
 };

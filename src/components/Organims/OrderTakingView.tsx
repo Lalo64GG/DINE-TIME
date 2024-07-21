@@ -16,7 +16,6 @@ export const OrderTakingView = () => {
     type: "success" | "error";
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTableNumber, setSelectedTableNumber] = useState("");
 
   const { handlePress } = usePost();
 
@@ -70,8 +69,8 @@ export const OrderTakingView = () => {
 
   const handleSaveTableNumber = (tableNumber: string) => {
     handleNewOrder();
-    setSelectedTableNumber(tableNumber);
-    updateOrderTable(tableNumber); // Assuming you have a method to update the table number in the order
+    updateOrderTable(tableNumber);
+    setIsModalOpen(false);
   };
 
   let tabs = [
