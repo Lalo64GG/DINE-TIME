@@ -10,11 +10,13 @@ import { FoodId } from "./components/Organims/FoodId";
 import { Login } from "./components/Organims/Login";
 import { AdminHome } from "./components/Organims/AdminHome";
 import { Waiters } from "./components/Organims/Waiters";
-import { ProtectedRoute } from "./Tools/ProtectedRoute"; // Importa el componente de ruta protegida
-import { AuthProvider } from "./Tools/AuthContextType"; // Importa el proveedor de autenticación
-import {Tables} from "./components/Organims/Tables";
+import { ProtectedRoute } from "./Tools/ProtectedRoute";
+import { AuthProvider } from "./Tools/AuthContextType";
+import { Tables } from "./components/Organims/Tables";
 import { Food } from "./components/Organims/Food";
-import {OrderTakingView } from "./components/Organims/OrderTakingView"
+import { OrderTakingView } from "./components/Organims/OrderTakingView";
+import { WaiterLogin } from "./components/Organims/WaiterLogin";
+import { WaiterProtectedRoute } from "./Tools/WaiterProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -33,10 +35,10 @@ const router = createBrowserRouter([
         path: "/food/:id",
         element: <FoodId />,
       },
-       {
-      path:"/task",
-       element: <OrderTakingView />,
-      }
+      {
+        path: "/task",
+        element: <OrderTakingView />,
+      },
     ],
   },
   {
@@ -49,29 +51,32 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/home",
-        element:  <ProtectedRoute element={<AdminHome />} />,
+        element: <ProtectedRoute element={<AdminHome />} />,
       },
       {
         path: "/admin/waiters",
-        element: <Waiters /> ,
+        element: <Waiters />,
       },
       {
         path: "/admin/tables",
-        element: <Tables/>
+        element: <Tables />,
       },
       {
         path: "/admin/food/",
-        element: <Food/>
+        element: <Food />,
       },
-      
-     
     ],
-  
   },
-  // {
-  //   path:"/waiter/task",
-  //   element: <ProtectedRoute element={<OrderTakingView />} />,
-  // }
+  {
+    path: "/waiter",
+    element: <WaiterLogin />,
+    children: [
+      {
+        path: "/waiter/home",
+        element: <WaiterProtectedRoute element={<OrderTakingView />} />,
+      },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

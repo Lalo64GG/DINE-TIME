@@ -1,11 +1,12 @@
+import React, { useState } from "react";
 import { useOrderManagement } from "../../Tools/Hooks/useOrderManagement";
 import { usePost } from "../../Tools/Hooks/usePost";
 import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { CardFood } from "../Molecules/CardFood";
-import { useState } from "react";
 import { Alert } from "../../ui/Alert";
+import { TableSelectionModal } from "../Organims/TableSelectionModal";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -14,6 +15,9 @@ export const OrderTakingView = () => {
     message: string;
     type: "success" | "error";
   } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTableNumber, setSelectedTableNumber] = useState("");
+
   const { handlePress } = usePost();
 
   const {
@@ -24,6 +28,7 @@ export const OrderTakingView = () => {
     handleSelectOrder,
     handleRemoveItem,
     calculateTotal,
+    updateOrderTable,
   } = useOrderManagement();
 
   const { data: allDrinks, loading: loadingDrinks } = useGet(
@@ -57,6 +62,16 @@ export const OrderTakingView = () => {
         console.log(error.message);
       }
     }
+  };
+
+  const handleNewOrderWithTable = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSaveTableNumber = (tableNumber: string) => {
+    handleNewOrder();
+    setSelectedTableNumber(tableNumber);
+    updateOrderTable(tableNumber); // Assuming you have a method to update the table number in the order
   };
 
   let tabs = [
@@ -111,7 +126,7 @@ export const OrderTakingView = () => {
       <div className="w-full lg:w-6/12 flex flex-col items-center mb-10 lg:mb-0 p-4 lg:p-0 rounded-lg">
         <div className="w-full">
           <button
-            onClick={handleNewOrder}
+            onClick={handleNewOrderWithTable}
             className="mb-4 p-2 bg-blue-500 text-white rounded w-full "
           >
             New Order
@@ -192,6 +207,12 @@ export const OrderTakingView = () => {
           )}
         </div>
       </div>
+
+      <TableSelectionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveTableNumber}
+      />
     </div>
   );
 };
