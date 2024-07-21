@@ -19,3 +19,14 @@ export type Drinks = Food & {
 export type Categoria = {
     productos: Food[] | Drinks[];
 }
+
+export type Item = {
+    item: Food | Drinks;
+    quantity: number;
+}
+
+export type Order = {
+    id: string;
+    items: Item[];
+    table: number;
+}

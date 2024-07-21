@@ -85,6 +85,17 @@ export const Nav = () => {
         <p className="font-bold text-inherit">DINE-TIME</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarItem>
+          <Link
+            to="/admin/home"
+            className={
+              activePath === "/admin/home" ? "text-secondary" : "text-foreground"
+            }
+            onClick={() => handleSetActive("/admin/home")}
+          >
+            Home
+          </Link>
+        </NavbarItem>
         <NavbarItem>
           <Link
             to="/admin/waiters"

@@ -3,9 +3,10 @@ import { Waiter } from "../../types/typeWaiter";
 
 type CardWaiterProps = {
   waitersData: Waiter[];
+  handlePress?: (id: string, name: string) => void;
 };
 
-export const CardWaiter = ({ waitersData }: CardWaiterProps) => {
+export const CardWaiter = ({ waitersData, handlePress }: CardWaiterProps) => {
   return (
     <div className="flex flex-wrap gap-4 mt-4 justify-center bg-white shadow-2xl p-4 rounded-lg">
       {waitersData.length > 0 ? (
@@ -36,8 +37,13 @@ export const CardWaiter = ({ waitersData }: CardWaiterProps) => {
               Email: <span className="text-sm font-normal">{waiter.email}</span>
             </p>
             <div className="flex justify-center items-center mt-4 gap-x-4">
-              <Button variant="solid">Editar</Button>
-              <Button color="danger" variant="flat">
+              <Button
+                color="danger"
+                variant="flat"
+                onClick={() =>
+                  handlePress && handlePress(waiter.id, waiter.nombre)
+                }
+              >
                 Eliminar
               </Button>
             </div>

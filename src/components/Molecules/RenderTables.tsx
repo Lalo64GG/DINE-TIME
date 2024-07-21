@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import { Table, Tables } from "../../types/typeTable"; // Asegúrate de importar correctamente tus tipos
 

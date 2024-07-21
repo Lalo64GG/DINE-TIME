@@ -53,11 +53,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/waiters",
-        element: <ProtectedRoute element={<Waiters />} />,
+        element: <Waiters /> ,
       },
       {
         path: "/admin/tables",
-        element: <ProtectedRoute element={<Tables/>}/>
+        element: <Tables/>
       },
       {
         path: "/admin/food/",

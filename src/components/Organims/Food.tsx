@@ -7,15 +7,22 @@ import { foodFormConfig } from "../../Tools/configurationsForms";
 import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
 import { CardFoodAdm } from "../Molecules/CardFoodAdm";
+import { useDelete } from "../../Tools/Hooks/useDelete";
+import { ConfirmAlertModal } from "../../ui/ConfirmAlert";
 
 const url = import.meta.env.VITE_API_URL;
 
 export const Food = () => {
   const { handlePress } = usePost();
+  const { handleDelete } = useDelete();
+
   const [alert, setAlert] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedFood, setSelectedFood] = useState<{ id: string; name: string } | null>(null);
 
   const token = localStorage.getItem('token'); 
   if (!token) {
@@ -50,6 +57,22 @@ export const Food = () => {
     }
   };
 
+  const handleDeleteFood = async () => {
+   if(selectedFood){
+    try {
+      const success = await handleDelete(`producto/${selectedFood.id}`, token);
+      if(!success){
+        setAlert({ message: "An error occurred", type: "error" });
+        return;
+      }
+      setAlert({ message: "Food deleted successfully", type:"success" })
+      setModalVisible(false); 
+    } catch (error) {
+      setAlert({ message: "An error occurred", type: "error" });
+    }
+   }
+  }
+
   const { data } = useGet(`${url}/producto`, token);
 
   return (
@@ -80,8 +103,27 @@ export const Food = () => {
       />
       <DividingLine />
       <div>
-       { data ?  <CardFoodAdm data={data} /> : <DataLoader/> }
+       { data ?  
+       <CardFoodAdm
+        handlePress={(id, name) => {
+          setSelectedFood({ id, name });
+          setModalVisible(true);
+        }} 
+        data={data} 
+      /> 
+       : <DataLoader/> 
+       }
       </div>
+      {
+        selectedFood && (
+          <ConfirmAlertModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            onConfirm={handleDeleteFood}
+            name={selectedFood.name}
+          />
+        )
+      }
     </div>
   );
 };

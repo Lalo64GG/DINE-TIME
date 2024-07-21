@@ -36,10 +36,10 @@ export const CardFood = ({ data, isRequiredTabs, isRequiredNavigate, onOrder }: 
   return (
     <div>
       {shouldShowTabs && isRequiredTabs && (
-        <div className="lg:w-[25%]">
+        <div className="lg:w-[35%]">
           <Tabs
             fullWidth
-            size="md"
+            size="sm"
             aria-label="Sort tabs"
             onSelectionChange={handleSelectionChange}
           >

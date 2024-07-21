@@ -3,9 +3,10 @@ import { Categoria } from "../../types/typeFood";
 
 type CardWaiterProps = {
   data: Categoria;
+  handlePress?: (id: string, name:string) => void;
 };
 
-export const CardFoodAdm = ({ data }: CardWaiterProps) => {
+export const CardFoodAdm = ({ data, handlePress }: CardWaiterProps) => {
   return (
     <div className="flex flex-wrap gap-4 mt-4 justify-center bg-white shadow-2xl p-4 rounded-lg">
       {data.productos.length > 0 ? (
@@ -33,8 +34,11 @@ export const CardFoodAdm = ({ data }: CardWaiterProps) => {
               <span className="text-sm font-normal">{food.precio}</span>
             </p>
             <div className="flex justify-center items-center mt-4 gap-x-4">
-              <Button variant="solid">Editar</Button>
-              <Button color="danger" variant="flat">
+              <Button 
+                color="danger" 
+                variant="flat"
+                onClick={() => handlePress && handlePress(food.id, food.nombre)}
+              >
                 Eliminar
               </Button>
             </div>

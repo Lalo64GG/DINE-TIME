@@ -39,7 +39,7 @@ export const Form = () => {
     try {
       const success = await handlePress(`${url}/auth/login`, objectPost);
       if (success) {
-        setAlert({ message: "Login exitoso", type: 'success' });
+        setAlert({ message: "Login Exitoso", type: 'success' });
         login(); // Actualizar el estado de autenticación
         setTimeout(() => {
           navigate("/admin/home");
