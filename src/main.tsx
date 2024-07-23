@@ -68,15 +68,13 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/waiter",
+    path: "/waiterLogin",
     element: <WaiterLogin />,
-    children: [
-      {
-        path: "/waiter/home",
-        element: <WaiterProtectedRoute element={<OrderTakingView />} />,
-      },
-    ],
   },
+  {
+      path: "/waiter/home",
+      element: <OrderTakingView/> ,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

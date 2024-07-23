@@ -1,33 +1,50 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form } from "../../ui/Form";
+import { useInputValidation } from "../../Tools/Hooks/useInputValidation";
+import { usePost } from "../../Tools/Hooks/usePost";
+import { Alert } from "../../ui/Alert";
+import { Button } from "@nextui-org/react";
+const url = import.meta.env.VITE_API_URL;
 
-export const WaiterLogin: React.FC = () => {
-  const [error, setError] = useState<string>("");
+export const WaiterLogin = () => {
   const navigate = useNavigate();
+  const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const email = useInputValidation();
+  const password = useInputValidation();
 
-  const handleLogin = async (credentials: { username: string; password: string }) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
+  const { handlePress } = usePost();
 
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem("waiterToken", data.token);
-        console.log("Redirigiendo a /waiter/home");  
-        navigate("/waiter/home");
-      } else {
-        setError(data.message);
-      }
-    } catch (error) {
-      setError("Error al iniciar sesión");
+  const handleLogin = async() =>{
+    email.validate();
+    password.validate();
+
+    if(email.isInvalid || password.isInvalid){
+      return;
     }
-  };
+
+    const objectPost = {
+      email: email.value,
+      password: password.value,	
+    }
+
+    try {
+      const success = await handlePress(`${url}/auth/loginMesero`, objectPost);
+      if (success) {
+        setAlert({ message: "Registro exitoso", type: 'success' });
+        setTimeout(() => {
+          navigate("/waiter/home");
+        }, 1500)
+      } else {
+        setAlert({ message: "Error en el registro", type: 'error' });
+      }
+    } catch (error :any) {
+      setAlert({ message: "Error en el registro: " + error.message, type: 'error' });
+      console.error("Error en el registro:", error);
+    }
+  }
+
+
+
 
   return (
     <div className="w-screen h-screen flex justify-center items-center mx-auto bg-gray-100">
@@ -51,9 +68,47 @@ export const WaiterLogin: React.FC = () => {
       <div className="w-full lg:w-6/12 flex flex-col items-center p-4 mt-10 lg:mt-0 order-1 lg:order-2">
         <div className="relative w-full h-full flex justify-center items-center p-4 ">
           <div className="flex justify-center items-center">
-            <Form onSubmit={handleLogin} />
+
+            {alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
+
+            <form className="bg-white rounded-md shadow-lg p-8 w-full max-w-md">
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email.value}
+                  onChange={(e) => email.setValue(e.target.value)}
+                  onBlur={email.validate}
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${email.isInvalid ? "border-red-500" : ""}`}
+                  placeholder="Enter your email"
+                />
+                {email.isInvalid && <p className="text-red-500 text-xs italic">Email is required.</p>}
+              </div>
+              <div className="mb-6">
+                <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password.value}
+                  onChange={(e) => password.setValue(e.target.value)}
+                  onBlur={password.validate}
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${password.isInvalid ? "border-red-500" : ""}`}
+                  placeholder="Enter your password"
+                />
+                {password.isInvalid && <p className="text-red-500 text-xs italic">Password is required.</p>}
+              </div>
+              <Button
+                fullWidth color="primary" onClick={ handleLogin }
+              >
+                Login
+              </Button>
+            </form>
           </div>
-          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       </div>
     </div>
