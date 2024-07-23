@@ -1,16 +1,18 @@
+import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 type PieData = {
   name: string;
   value: number;
-  color: string; // Añadir la propiedad color
+  color: string;
 };
 
 type GraphicPieProps = {
   pieData: PieData[];
+  COLORS: string[];
 };
 
-export const GraphicPie: React.FC<GraphicPieProps> = ({ pieData }) => (
+export const GraphicPie: React.FC<GraphicPieProps> = ({ pieData, COLORS }) => (
   <div className="w-full h-full">
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
@@ -24,7 +26,7 @@ export const GraphicPie: React.FC<GraphicPieProps> = ({ pieData }) => (
           label={({ name, value }) => `${name}: ${value}`}
         >
           {pieData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
         <Tooltip />

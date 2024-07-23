@@ -2,6 +2,8 @@ import Slider from "react-slick";
 import { useRef, useEffect } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import img from "../../assets/img/dineTime.jpg";
+import img2 from "../../assets/img/devWizard.jpg";
 
 export const Carrusel = () => {
   const sliderRef = useRef<Slider>(null);
@@ -60,44 +62,28 @@ export const Carrusel = () => {
     <div className="slider-container">
       <Slider {...settings} ref={sliderRef}>
         <div className="slide-item">
-          <div className="bg-green-500 mx-4 p-4">
-            <h3>1</h3>
-          </div>
+          <img src={img} alt="Slide 1" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-white mx-4 p-4">
-            <h3>2</h3>
-          </div>
+          <img src={img2} alt="Slide 2" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-green-500 mx-4 p-4">
-            <h3>3</h3>
-          </div>
+          <img src={img} alt="Slide 3" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-white mx-4 p-4">
-            <h3>4</h3>
-          </div>
+          <img src={img2} alt="Slide 4" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-green-500 mx-4 p-4">
-            <h3>5</h3>
-          </div>
+          <img src={img} alt="Slide 5" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-white mx-4 p-4">
-            <h3>6</h3>
-          </div>
+          <img src={img2} alt="Slide 6" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-green-500 mx-4 p-4">
-            <h3>7</h3>
-          </div>
+          <img src={img} alt="Slide 7" className="mx-4 p-4" />
         </div>
         <div className="slide-item">
-          <div className="bg-white mx-4 p-4">
-            <h3>8</h3>
-          </div>
+          <img src={img2} alt="Slide 8" className="mx-4 p-4" />
         </div>
       </Slider>
     </div>
