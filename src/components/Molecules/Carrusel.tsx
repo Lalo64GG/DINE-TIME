@@ -59,8 +59,8 @@ export const Carrusel = () => {
   };
 
   return (
-    <div className="slider-container">
-      <Slider {...settings} ref={sliderRef}>
+    <div className="slider-container" >
+      <Slider {...settings} ref={sliderRef} >
         <div className="slide-item">
           <img src={img} alt="Slide 1" className="mx-4 p-4" />
         </div>
