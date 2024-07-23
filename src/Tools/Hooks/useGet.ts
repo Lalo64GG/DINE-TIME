@@ -6,7 +6,7 @@ export const useGet = (url : string, token?: string) => {
 
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +33,6 @@ export const useGet = (url : string, token?: string) => {
           msg: "Algo salio mal al hacer la petición GET",
           error,
         });
-        setError(error);
-        setLoading(false);
       }
     };
 

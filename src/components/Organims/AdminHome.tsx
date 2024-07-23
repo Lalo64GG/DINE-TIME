@@ -1,8 +1,10 @@
+// src/components/Pages/AdminHome.tsx
 import { Graphics } from "../Molecules/Graphics";
 import { RenderWaiterCards } from "../Molecules/RenderWaitersCards";
+import { RenderTable } from "../Molecules/RenderTables";
+import { RenderBalance } from "../Molecules/RenderBalance";
 import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
-import { RenderTable } from "../Molecules/RenderTables";
 import { useAdminInfo } from "../../Tools/Hooks/useAdminInfo";
 
 const url = import.meta.env.VITE_API_URL;
@@ -14,8 +16,9 @@ export const AdminHome = () => {
     return null;
   }
 
-  const { data } = useGet(`${url}/mesero`, token);
-  const { data: dataTable } = useGet(`${url}/mesas`, token);
+  const { data: waitersData } = useGet(`${url}/mesero`, token);
+  const { data: tableData } = useGet(`${url}/mesas`, token);
+  const { data: balanceData, loading: loadingBalance, error: errorBalance } = useGet(`${url}/estadistica`);
   const { adminInfo } = useAdminInfo();
 
   return (
@@ -25,20 +28,27 @@ export const AdminHome = () => {
 
       <div className="mt-10 mb-16">
         <h2 className="text-center text-2xl font-bold">Gráficas</h2>
-        <Graphics  />
+        <Graphics />
       </div>
 
       <div className="my-10">
         <h2 className="mb-10 text-center text-2xl font-bold">Meseros</h2>
         <div className="flex flex-wrap gap-4 justify-center">
-          {data ? <RenderWaiterCards waitersData={data} /> : <DataLoader />}
+          {waitersData ? <RenderWaiterCards waitersData={waitersData} /> : <DataLoader />}
         </div>
       </div>
 
       <div className="my-10">
         <h2 className="mb-10 text-center text-2xl font-bold">Mesas</h2>
         <div className="flex flex-wrap gap-4 justify-center">
-          {dataTable ? <RenderTable tableData={dataTable} /> : <DataLoader />}
+          {tableData ? <RenderTable tableData={tableData} /> : <DataLoader />}
+        </div>
+      </div>
+
+      <div className="my-10">
+        <h2 className="mb-10 text-center text-2xl font-bold">Balance Semanal</h2>
+        <div className="flex flex-wrap gap-4 justify-center">
+          { balanceData ? <RenderBalance balanceData={balanceData} /> : <DataLoader/> }
         </div>
       </div>
 
