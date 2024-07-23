@@ -4,7 +4,6 @@ import { useGet } from "../../Tools/Hooks/useGet";
 import { DataLoader } from "../../ui/Spinner";
 import { RenderTable } from "../Molecules/RenderTables";
 import { useAdminInfo } from "../../Tools/Hooks/useAdminInfo";
-import { useSalesData } from "../../Tools/Hooks/useSalesData";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -18,7 +17,6 @@ export const AdminHome = () => {
   const { data } = useGet(`${url}/mesero`, token);
   const { data: dataTable } = useGet(`${url}/mesas`, token);
   const { adminInfo } = useAdminInfo();
-  const { salesProbabilities, weeklySales, loading } = useSalesData(token);
 
   return (
     <div className="container mx-auto p-4 bg-white rounded-md shadow-2xl my-10">
@@ -27,7 +25,7 @@ export const AdminHome = () => {
 
       <div className="mt-10 mb-16">
         <h2 className="text-center text-2xl font-bold">Gráficas</h2>
-        {loading ? <DataLoader /> : <Graphics probabilities={salesProbabilities} />}
+        <Graphics  />
       </div>
 
       <div className="my-10">
@@ -44,12 +42,6 @@ export const AdminHome = () => {
         </div>
       </div>
 
-      <div className="my-10">
-        <h2 className="mb-10 text-center text-2xl font-bold">Ventas Semanales</h2>
-        <div className="flex flex-wrap gap-4 justify-center">
-          {loading ? <DataLoader /> : <p>Ventas esta semana: {weeklySales}</p>}
-        </div>
-      </div>
     </div>
   );
 };

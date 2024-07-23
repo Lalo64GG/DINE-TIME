@@ -28,14 +28,15 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
     return highestTable + 1;
   };
 
-  const handleNewOrder = () => {
-    const newOrder = {
+  const handleNewOrder = (newOrder?: Partial<Order>) => {
+    const order = {
       id: Date.now().toString(),
       items: [],
-      table: getNextTableNumber(),
+      table: newOrder?.table || getNextTableNumber(),
+      ...newOrder,
     };
-    setOrders([...orders, newOrder]);
-    setSelectedOrder(newOrder);
+    setOrders([...orders, order]);
+    setSelectedOrder(order);
   };
 
   const handleAddToOrder = (item: Food | Drinks) => {
@@ -55,6 +56,7 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
       );
       setOrders(updatedOrders);
       setSelectedOrder(updatedOrder);
+      console.log(updatedOrder);
     }
   };
 
@@ -79,12 +81,21 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
     }
   };
 
+  
+
   const calculateTotal = (order: Order) => {
     return order.items.reduce(
       (total, { item, quantity }) => total + item.precio * quantity,
       0
     );
   };
+
+    const handleDeleteOrder = (orderId: string) => {
+    const updatedOrders = orders.filter(order => order.id !== orderId);
+    setOrders(updatedOrders);
+    setSelectedOrder(null);
+  };
+
 
   return {
     orders,
@@ -93,6 +104,7 @@ export const useOrderManagement = (initialOrders: Order[] = []) => {
     handleAddToOrder,
     handleSelectOrder,
     handleRemoveItem,
-    calculateTotal
+    calculateTotal,
+    handleDeleteOrder
   };
 };

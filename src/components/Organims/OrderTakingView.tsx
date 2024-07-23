@@ -6,6 +6,7 @@ import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { CardFood } from "../Molecules/CardFood";
 import { useState } from "react";
 import { Alert } from "../../ui/Alert";
+import { TableSelectionModal } from "./TableSelectionModal";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -14,20 +15,24 @@ export const OrderTakingView = () => {
     message: string;
     type: "success" | "error";
   } | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedTable, setSelectedTable] = useState<{ id: string; num_mesa: number } | null>(null);
+
   const { handlePress } = usePost();
 
   const {
     orders,
     selectedOrder,
-    handleNewOrder,
     handleAddToOrder,
     handleSelectOrder,
     handleRemoveItem,
     calculateTotal,
+    handleNewOrder,
+    handleDeleteOrder
   } = useOrderManagement();
 
   const { data: allDrinks, loading: loadingDrinks } = useGet(
-    `${url}/categorias/68af9a39-e9a7-4361-b8b7-68ebe19b5636`
+    `${url}/categorias/312b7453-e2a1-4176-ab63-96d00eae1196`
   );
   const { data: allFood, loading: loadingFood } = useGet(
     `${url}/categorias/5ce27342-ba9b-4d7a-8d38-a5efc11d9032`
@@ -38,18 +43,40 @@ export const OrderTakingView = () => {
   }
 
   const handleSendOrder = async () => {
-    if (!selectedOrder) {
+    if (!selectedOrder || !selectedTable) {
+      setAlert({
+        message: "Por favor seleccione una mesa antes de enviar la orden.",
+        type: "error",
+      });
       return;
     }
+  
     try {
-      const success = await handlePress(`${url}/ordenes`, selectedOrder);
-      if (!success) {
+      const totalPrice = calculateTotal(selectedOrder);
+
+      console.log({
+        precio_Fn: totalPrice,
+        id_mesa: selectedTable.id,
+      });
+  
+      const response = await handlePress(`${url}/ventas`, {
+        precio_Fn: totalPrice,
+        id_mesa: selectedTable.id,
+      });
+  
+      if (!response) {
         setAlert({
           message: "Ocurrió algún error, intente de nuevo",
           type: "error",
         });
         return;
       }
+  
+      // Eliminar la orden enviada
+      if (selectedOrder) {
+        handleDeleteOrder(selectedOrder.id);
+      }
+  
       setAlert({ message: "Orden enviada correctamente", type: "success" });
     } catch (error) {
       if (error instanceof Error) {
@@ -57,6 +84,11 @@ export const OrderTakingView = () => {
         console.log(error.message);
       }
     }
+  };
+
+  const handleSelectTable = (table: { id: string; num_mesa: number }) => {
+    setSelectedTable(table);
+    handleNewOrder({ id: Date.now().toString(), items: [], table: table.num_mesa });
   };
 
   let tabs = [
@@ -107,11 +139,15 @@ export const OrderTakingView = () => {
           onClose={() => setAlert(null)}
         />
       )}
-
+      <TableSelectionModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onSelect={handleSelectTable}
+      />
       <div className="w-full lg:w-6/12 flex flex-col items-center mb-10 lg:mb-0 p-4 lg:p-0 rounded-lg">
         <div className="w-full">
           <button
-            onClick={handleNewOrder}
+            onClick={() => setModalOpen(true)}
             className="mb-4 p-2 bg-blue-500 text-white rounded w-full "
           >
             New Order
@@ -152,9 +188,7 @@ export const OrderTakingView = () => {
             >
               <p>Order ID: {order.id}</p>
               <p>Table: {order.table}</p>
-              <p>
-                Items: {order.items.reduce((sum, i) => sum + i.quantity, 0)}
-              </p>
+              <p>Items: {order.items.reduce((sum, i) => sum + i.quantity, 0)}</p>
               <p>Total: $ {calculateTotal(order).toFixed(2)}</p>
             </div>
           ))}
@@ -167,9 +201,8 @@ export const OrderTakingView = () => {
               <p>Table: {selectedOrder.table}</p>
               {selectedOrder.items.map(({ item, quantity }, index) => (
                 <div key={index} className="flex justify-between">
-                  <p>
-                    {item.nombre} x{quantity}
-                  </p>
+                  <p>{item.nombre} x</p>
+                  <p>{quantity}</p>
                   <p>$ {(item.precio * quantity).toFixed(2)}</p>
                   <button
                     onClick={() => handleRemoveItem(item)}

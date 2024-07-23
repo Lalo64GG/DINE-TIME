@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin/home",
-        element: <ProtectedRoute element={<AdminHome />} />,
+        element: <AdminHome />,
       },
       {
         path: "/admin/waiters",
