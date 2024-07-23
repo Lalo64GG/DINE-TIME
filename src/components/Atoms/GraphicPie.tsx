@@ -3,14 +3,14 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recha
 type PieData = {
   name: string;
   value: number;
+  color: string; // Añadir la propiedad color
 };
 
 type GraphicPieProps = {
   pieData: PieData[];
-  COLORS: string[];
 };
 
-export const GraphicPie = ({ pieData, COLORS }: GraphicPieProps) => (
+export const GraphicPie: React.FC<GraphicPieProps> = ({ pieData }) => (
   <div className="w-full h-full">
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
@@ -24,7 +24,7 @@ export const GraphicPie = ({ pieData, COLORS }: GraphicPieProps) => (
           label={({ name, value }) => `${name}: ${value}`}
         >
           {pieData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
         <Tooltip />
