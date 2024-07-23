@@ -1,10 +1,8 @@
-import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 type PieData = {
   name: string;
   value: number;
-  color: string;
 };
 
 type GraphicPieProps = {
@@ -12,7 +10,7 @@ type GraphicPieProps = {
   COLORS: string[];
 };
 
-export const GraphicPie: React.FC<GraphicPieProps> = ({ pieData, COLORS }) => (
+export const GraphicPie = ({ pieData, COLORS }: GraphicPieProps) => (
   <div className="w-full h-full">
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>

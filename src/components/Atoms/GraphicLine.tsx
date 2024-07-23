@@ -1,17 +1,17 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface LineData {
+type LineData = {
   name: string;
   uv: number;
   pv: number;
-}
+  amt: number;
+};
 
-interface GraphicLineProps {
+type GraphicLineProps = {
   data: LineData[];
-}
+};
 
-export const GraphicLine: React.FC<GraphicLineProps> = ({ data }) => (
+export const GraphicLine = ({ data }: GraphicLineProps) => (
   <div className="w-full h-full">
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
@@ -20,8 +20,8 @@ export const GraphicLine: React.FC<GraphicLineProps> = ({ data }) => (
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-        <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
       </LineChart>
     </ResponsiveContainer>
   </div>
