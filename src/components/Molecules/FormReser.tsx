@@ -1,16 +1,28 @@
 import { DateInput, Input, TimeInput } from "@nextui-org/react";
-import { CalendarDate, parseDate, parseTime } from "@internationalized/date";
+import {
+  CalendarDate,
+  parseDate,
+  parseTime,
+  now,
+} from "@internationalized/date";
 import { CalendarIcon } from "../../ui/svg/CalendarIcon";
 import { Button } from "../Atoms/Button";
 import { useState } from "react";
 import { useInputValidation } from "../../Tools/Hooks/useInputValidation";
 import { usePost } from "../../Tools/Hooks/usePost";
-import { Alert } from "../../ui/Alert"
+import { Alert } from "../../ui/Alert";
 
 export const FormReser = () => {
-
   const { handlePress } = usePost();
-  const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error'  } | null>(null)
+  const [alert, setAlert] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+
+  const fecha = new Date();
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth() + 1;
+  const año = fecha.getFullYear();
 
   const name = useInputValidation("");
   const lastName = useInputValidation("");
@@ -18,12 +30,22 @@ export const FormReser = () => {
   const phone = useInputValidation("");
   const amountOfPeople = useInputValidation("");
 
+  const currentTime = now("America/Mexico_City"); // Obtiene la hora actual en tu zona horaria
+  const currentHour = String(currentTime.hour).padStart(2, "0");
+  const currentMinute = String(currentTime.minute).padStart(2, "0");
+
+  const [time, setTime] = useState(
+    parseTime(`${currentHour}:${currentMinute}`)
+  );
+
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [date, setDate] = useState(parseDate("2024-04-04"));
-  const [time, setTime] = useState(parseTime("12:00"));
+  const [date, setDate] = useState(
+    parseDate(
+      `${año}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`
+    )
+  );
 
   const handleConfirm = () => {
-    // Verificar si alguno de los campos del primer formulario está vacío
     name.validate();
     lastName.validate();
     email.validate();
@@ -42,10 +64,9 @@ export const FormReser = () => {
     }
   };
 
-  const handleSubmit = async() => {
-
+  const handleSubmit = async () => {
     const url = import.meta.env.VITE_API_URL;
-    console.log(url)
+    console.log(url);
 
     const data = {
       nombre: name.value,
@@ -53,29 +74,79 @@ export const FormReser = () => {
       email: email.value,
       phone: phone.value,
       amountOfPeople: parseInt(amountOfPeople.value),
-      dia:date.toString(),
-      hora:time.toString(),
+      dia: date.toString(),
+      hora: time.toString(),
     };
-    try{
-      const success = await handlePress(`${url}/reservaciones `, data);
-      if(!success){
+
+    try {
+      const success = await handlePress(`${url}/reservaciones`, data);
+      if (!success) {
         setAlert({ message: "Error al validar los datos", type: "error" });
         return;
-      } 
+      }
 
       setAlert({ message: "Reservación exitosa", type: "success" });
+    } catch (error: any) {}
+  };
 
-    }catch(error:any){
+  const validateAmountOfPeople = (value: string) => {
+    const parsedValue = parseInt(value);
+    if (parsedValue < 1) {
+      setAlert({
+        message: "El número de personas debe ser mayor a 0",
+        type: "error",
+      });
+      return;
+    }
+    amountOfPeople.setValue(value);
+  };
 
+  const validateDate = (selectedDate: CalendarDate) => {
+    const today = now("America/Mexico_City");
+    if (selectedDate.compare(today) < 0) {
+      setAlert({
+        message: "No puedes seleccionar una fecha anterior a hoy",
+        type: "error",
+      });
+      return;
+    }
+    setDate(selectedDate);
+  };
+
+  // Validación para no aceptar horas anteriores
+  const validateTime = (selectedTime: string) => {
+    const [selectedHour, selectedMinute] = selectedTime.split(":").map(Number);
+
+    // Compara la hora seleccionada con la hora actual
+    if (
+      selectedHour < currentTime.hour ||
+      (selectedHour === currentTime.hour && selectedMinute < currentTime.minute)
+    ) {
+      setAlert({
+        message: "No puedes seleccionar una hora anterior a la actual",
+        type: "error",
+      });
+      return;
     }
 
-
-
+    setTime(
+      parseTime(
+        `${String(selectedHour).padStart(2, "0")}:${String(
+          selectedMinute
+        ).padStart(2, "0")}`
+      )
+    );
   };
 
   return (
     <div className="flex justify-center items-center w-full lg:w-[80%] mx-auto">
-      {alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
+      {alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="w-full flex flex-col lg:flex-row items-center lg:items-start lg:gap-10">
         <form className="w-full p-4 lg:w-6/12 flex flex-col justify-center items-center mb-10 lg:mb-10 lg:px-16 rounded-lg space-y-5 bg-white shadow-lg">
           <h2 className="font-semibold text-center text-2xl">Contacto</h2>
@@ -161,7 +232,7 @@ export const FormReser = () => {
               fullWidth
               isInvalid={amountOfPeople.isInvalid}
               value={amountOfPeople.value}
-              onChange={(e) => amountOfPeople.setValue(e.target.value)}
+              onChange={(e) => validateAmountOfPeople(e.target.value)}
               isDisabled={!isConfirmed}
             />
           </div>
@@ -175,21 +246,19 @@ export const FormReser = () => {
               className="w-full"
               value={date}
               isInvalid={date === undefined}
-              onChange={setDate}
+              onChange={validateDate}
               isDisabled={!isConfirmed}
             />
           </div>
 
-          <div className="w-full mb-5">
-            <TimeInput
-              isRequired
-              label="Event Time"
-              value={time}
-              isInvalid={time === undefined}
-              onChange={setTime}
-              isDisabled={!isConfirmed}
-            />
-          </div>
+          <TimeInput
+            isRequired
+            label="Event Time"
+            value={time}
+            isInvalid={time === undefined}
+            onChange={(selectedTime) => validateTime(selectedTime.toString())}
+            isDisabled={!isConfirmed}
+          />
 
           {isConfirmed && (
             <div className="w-full flex justify-center items-center">

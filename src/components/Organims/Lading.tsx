@@ -83,6 +83,7 @@ export const Lading = () => {
       <div id="form-reservation">
         <h2 className="text-center font-bold text-2xl">¡Haz tu Reserva!</h2>
         <p className=" text-center font-semibold mb-5">y no pierdas tiempo esperando </p>
+        <p className=" text-center font-semibold mb-5">Llena el formulario Contacto para poder desbloquear reservaciones</p>
         <FormReser/>
       </div>
      
